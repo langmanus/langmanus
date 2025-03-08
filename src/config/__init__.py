@@ -1,6 +1,10 @@
 from .env import (
-    OPENAI_MODEL,
-    OPENAI_BASE_URL,
+    SUPERVISOR_BASE_URL,
+    SUPERVISOR_MODEL,
+    SUPERVISOR_API_KEY,
+    AGENT_BASE_URL,
+    AGENT_MODEL,
+    AGENT_API_KEY,
 )
 from .agents import (
     TEAM_MEMBERS,
@@ -12,8 +16,12 @@ from .agents import (
 from .tools import TAVILY_MAX_RESULTS
 
 __all__ = [
-    'OPENAI_MODEL',
-    'OPENAI_BASE_URL',
+    'SUPERVISOR_BASE_URL',
+    'SUPERVISOR_MODEL',
+    'SUPERVISOR_API_KEY',
+    'AGENT_BASE_URL',
+    'AGENT_MODEL',
+    'AGENT_API_KEY',
     'TEAM_MEMBERS',
     'SUPERVISOR_PROMPT',
     'RESEARCHER_PROMPT',

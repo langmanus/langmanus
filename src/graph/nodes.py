@@ -5,7 +5,7 @@ from langgraph.types import Command
 from langgraph.graph import END
 
 from src.agents import research_agent, code_agent, file_manager_agent
-from src.agents.llm import llm
+from src.agents.llm import supervisor_llm
 from src.config import TEAM_MEMBERS, SUPERVISOR_PROMPT
 from .types import State, Router
 
@@ -62,7 +62,7 @@ def supervisor_node(state: State) -> Command[Literal[*TEAM_MEMBERS, "__end__"]]:
     messages = [
         {"role": "system", "content": SUPERVISOR_PROMPT},
     ] + state["messages"]
-    response = llm.with_structured_output(Router).invoke(messages)
+    response = supervisor_llm.with_structured_output(Router).invoke(messages)
     goto = response["next"]
     logger.debug(f"Current state messages: {state['messages']}")
     logger.debug(f"Supervisor response: {response}")

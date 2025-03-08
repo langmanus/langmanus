@@ -40,24 +40,31 @@ By completing these steps, you'll ensure your environment is properly configured
 
 ### Configure Environment Variables
 
-LangManus relies on the following APIs by default:
-- [**OpenAI**](https://platform.openai.com/api-keys): Serves as the LLM (Large Language Model) provider.
-- [**Tavily**](https://tavily.com/): Facilitates web search functionality.
-- [**Jina**](https://jina.ai/): Enables web crawling capabilities.
-
-Create a `.env` file in the project root and configure the following environment variables:
+LangManus uses a two-tier LLM system with separate configurations for supervisor and agent roles. Create a `.env` file in the project root and configure the following environment variables:
 
 ```ini
-OPENAI_API_KEY=your_openai_api_key
+# Supervisor LLM Configuration (defaults to qwen-max-latest)
+SUPERVISOR_MODEL=qwen-max-latest
+SUPERVISOR_API_KEY=your_supervisor_api_key
+SUPERVISOR_BASE_URL=your_custom_base_url  # Optional
+
+# Agent LLM Configuration (defaults to qwen2.5-vl-72b-instruct)
+AGENT_MODEL=qwen2.5-vl-72b-instruct
+AGENT_API_KEY=your_agent_api_key
+AGENT_BASE_URL=your_custom_base_url  # Optional
+
+# Tool API Keys
 TAVILY_API_KEY=your_tavily_api_key
-JINA_API_KEY=your_jina_api_key
+JINA_API_KEY=your_jina_api_key  # Optional
 ```
 
 > **Note:**
 >
-> - If you wish to use a custom OpenAI API provider, you can specify the base URL by setting the `OPENAI_BASE_URL`
->   environment variable.
-> - Jina API key is optional. Provide your own key to access a higher rate limit.
+> - The system uses different models for supervision (Qwen-max by default) and agent tasks (Qwen-VL by default)
+> - You can customize the base URLs for both supervisor and agent LLMs independently
+> - Supervisor and agent can use different API keys if needed
+> - Jina API key is optional. Provide your own key to access a higher rate limit
+> - Tavily search is configured to return a maximum of 5 results by default
 
 You can copy the `.env.example` file as a template to get started:
 
@@ -77,9 +84,10 @@ uv run main.py
 
 ### Advanced Configuration
 
-LangManus can be customized through various configuration options in the `src/config` directory:
-- `tools.py`: Configure available tools and their settings
-- `env.py`: Manage environment variables and API configurations
+LangManus can be customized through various configuration files in the `src/config` directory:
+- `env.py`: Configure LLM models, API keys, and base URLs
+- `tools.py`: Adjust tool-specific settings (e.g., Tavily search results limit)
+- `agents.py`: Modify team composition and agent system prompts
 
 ## Contributing
 
