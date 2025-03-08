@@ -10,5 +10,6 @@ dependencies = [
     "langchain-experimental>=0.3.4",
     "langchain-openai>=0.3.8",
     "langgraph>=0.3.5",
+    "readabilipy>=0.3.0",
     "socksio>=1.0.0",
 ]
