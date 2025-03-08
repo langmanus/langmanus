@@ -7,7 +7,6 @@ class ReadabilityExtractor:
     def extract_article(self, html: str) -> Article:
         article = simple_json_from_html_string(html, use_readability=True)
         return Article(
-            url=article.get("url"),
             title=article.get("title"),
             html_content=article.get("content"),
         )

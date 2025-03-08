@@ -19,4 +19,5 @@ class Crawler:
         html = jina_client.crawl(url, return_format="html")
         extractor = ReadabilityExtractor()
         article = extractor.extract_article(html)
+        article.url = url
         return article
