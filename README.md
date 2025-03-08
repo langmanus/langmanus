@@ -35,15 +35,9 @@ uv sync
 ### Configure Environment Variables
 
 Manus relies on the following APIs by default:
-<<<<<<< HEAD
 - [**OpenAI**](https://platform.openai.com/api-keys): Serves as the LLM (Large Language Model) provider.
 - [**Tavily**](https://tavily.com/): Facilitates web search functionality.
 - [**Jina**](https://jina.ai/): Enables web crawling capabilities.
-=======
-- **OpenAI**: Serves as the LLM (Large Language Model) provider
-- **Tavily**: Facilitates web search functionality
-- **Jina**: Enables web crawling capabilities
->>>>>>> feat: refactor the project structure
 
 Create a `.env` file in the project root and configure the following environment variables:
 
@@ -52,14 +46,8 @@ OPENAI_API_KEY=your_openai_api_key
 TAVILY_API_KEY=your_tavily_api_key
 JINA_API_KEY=your_jina_api_key
 
-<<<<<<< HEAD
 > If you wish to use a custom OpenAI API provider, you can specify the base URL by setting the `OPENAI_BASE_URL` environment variable.
 > Jina API key is optional. Provide your Jina API key to access a higher rate limit.
-=======
-# Optional: Custom OpenAI API base URL
-OPENAI_BASE_URL=your_custom_openai_endpoint  # Optional
-```
->>>>>>> feat: refactor the project structure
 
 You can copy the `.env.example` file as a template:
 ```bash
