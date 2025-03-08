@@ -1,5 +1,4 @@
 from .jina_client import JinaClient
-from .markdown_to_message_content import markdown_to_message_content
 from .readability_extractor import ReadabilityExtractor
 
 
@@ -22,6 +21,5 @@ class CrawlerTool:
         html = jina_client.crawl_html(url)
         extractor = ReadabilityExtractor()
         article = extractor.extract_article(html)
-        markdown = article.to_markdown(including_title=True)
-        message_content = markdown_to_message_content(markdown, url)
+        message_content = article.to_message_content()
         return message_content
