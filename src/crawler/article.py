@@ -18,7 +18,6 @@ class Article:
         return markdown
 
     def to_message_content(self) -> list[dict[str, str]]:
-        # 定义正则表达式来匹配图片 URL
         image_pattern = r"!\[.*?\]\((.*?)\)"
 
         results: list[dict[str, str]] = []
