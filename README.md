@@ -1,18 +1,38 @@
 # Manus
 
-## Installation
+## Setup
 
-Manus use [uv](https://github.com/astral-sh/uv) as its package manager.
+### Install Dependencies
 
-First, setup virtual environment and install dependencies via `uv`.
+Manus utilizes [uv](https://github.com/astral-sh/uv) as its package manager. To get started, set up a virtual environment and install the required dependencies using `uv`:
 
 ```bash
 uv sync
 ```
 
+### Configure Environment Variables
+
+Manus relies on the following APIs by default:
+- **OpenAI**: Serves as the LLM (Large Language Model) provider.
+- **Tavily**: Facilitates web search functionality.
+- **Jina**: Enables web crawling capabilities.
+
+To ensure proper functionality, you need to define the following environment variables:
+
+```plaintext
+OPENAI_API_KEY=your_openai_api_key
+TAVILY_API_KEY=your_tavily_api_key
+JINA_API_KEY=your_jina_api_key
+```
+
+> **Note:** If you wish to use a custom OpenAI API provider, you can specify the base URL by setting the `OPENAI_BASE_URL` environment variable.
+
+---
+
 ## Usage
 
-Run the script.
+To execute the script, simply run:
+
 ```bash
 uv run main.py
 ```
