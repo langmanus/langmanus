@@ -13,4 +13,6 @@ dependencies = [
     "readabilipy>=0.3.0",
     "python-dotenv>=1.0.1",
     "socksio>=1.0.0",
+    "markdownify>=1.1.0",
+    "markdown-it-py>=3.0.0",
 ]
