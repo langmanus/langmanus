@@ -17,10 +17,7 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "env": {
-                "PYTHONPATH": "${workspaceFolder}",
-                "TAVILY_API_KEY": "xxx", 
-                "OPENAI_BASE_URL": "xxx",
-                "OPENAI_API_KEY": "xxx"
+                "PYTHONPATH": "${workspaceFolder}"
             }
         },
         {

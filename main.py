@@ -1,9 +1,21 @@
-from src.graph import graph
+"""
+Entry point script for the LangGraph Demo.
+"""
+from src.workflow import run_agent_workflow
 
 
 if __name__ == "__main__":
-    for s in graph.stream(
-        {"messages": [("user", "Give me a report about Manus")]}, subgraphs=True
-    ):
-        print(s)
-        print("----")
+    import sys
+    
+    if len(sys.argv) > 1:
+        user_query = " ".join(sys.argv[1:])
+    else:
+        user_query = input("Enter your query: ")
+    
+    result = run_agent_workflow(user_query)
+    
+    # Print the conversation history
+    print("\n=== Conversation History ===")
+    for message in result["messages"]:
+        role = message.type
+        print(f"\n[{role.upper()}]: {message.content}")
