@@ -6,8 +6,9 @@ from markdownify import markdownify as md
 
 
 class Article:
-    def __init__(self, url: str, title: str, html_content: str):
-        self.url = url
+    url: str
+
+    def __init__(self, title: str, html_content: str):
         self.title = title
         self.html_content = html_content
 
@@ -32,3 +33,8 @@ class Article:
                 content.append({"type": "text", "text": part.strip()})
 
         return content
+
+
+def get_image_url(url: str, base_url: str) -> str:
+    result = urljoin(base_url, url)
+    return result
