@@ -7,6 +7,7 @@ from .agents import (
     SUPERVISOR_PROMPT,
     RESEARCHER_PROMPT,
     CODER_PROMPT,
+    FILE_MANAGER_PROMPT,
 )
 from .tools import TAVILY_MAX_RESULTS
 
@@ -17,5 +18,6 @@ __all__ = [
     'SUPERVISOR_PROMPT',
     'RESEARCHER_PROMPT',
     'CODER_PROMPT',
+    'FILE_MANAGER_PROMPT',
     'TAVILY_MAX_RESULTS',
 ]
