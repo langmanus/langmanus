@@ -18,7 +18,7 @@ class Article:
         markdown += md(self.html_content)
         return markdown
 
-    def to_tool_message(self, tool_name) -> ToolMessage:
+    def to_message(self) -> list[dict]:
         image_pattern = r"!\[.*?\]\((.*?)\)"
 
         content: list[dict[str, str]] = []
@@ -31,4 +31,4 @@ class Article:
             else:
                 content.append({"type": "text", "text": part.strip()})
 
-        return ToolMessage(content=content, name=tool_name)
+        return content

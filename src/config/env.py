@@ -5,5 +5,5 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # OpenAI Configuration
-OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL") 
