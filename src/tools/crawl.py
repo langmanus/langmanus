@@ -4,7 +4,7 @@ from typing import Annotated
 from langchain_core.messages import ToolMessage
 from langchain_core.tools import tool
 
-from crawler import Crawler
+from src.crawler import Crawler
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ def crawl_tool(
     try:
         crawler = Crawler()
         article = crawler.crawl(url)
-        return article.to_tool_message(tool_name=crawl_tool.__name__)
+        return article.to_tool_message(tool_name="crawl_tool")
     except BaseException as e:
         error_msg = f"Failed to crawl. Error: {repr(e)}"
         logger.error(error_msg)
