@@ -1,6 +1,7 @@
 import re
 from urllib.parse import urljoin
 
+from langchain_core.messages import ToolMessage
 from markdownify import markdownify as md
 
 
@@ -17,17 +18,17 @@ class Article:
         markdown += md(self.html_content)
         return markdown
 
-    def to_message_content(self) -> list[dict[str, str]]:
+    def to_tool_message(self, tool_name) -> ToolMessage:
         image_pattern = r"!\[.*?\]\((.*?)\)"
 
-        results: list[dict[str, str]] = []
+        content: list[dict[str, str]] = []
         parts = re.split(image_pattern, self.to_markdown())
 
         for i, part in enumerate(parts):
             if i % 2 == 1:
                 image_url = urljoin(self.url, part.strip())
-                results.append({"type": "image_url", "image_url": {"url": image_url}})
+                content.append({"type": "image_url", "image_url": {"url": image_url}})
             else:
-                results.append({"type": "text", "text": part.strip()})
+                content.append({"type": "text", "text": part.strip()})
 
-        return results
+        return ToolMessage(content=content, name=tool_name)
