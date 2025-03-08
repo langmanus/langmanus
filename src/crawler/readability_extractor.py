@@ -9,5 +9,5 @@ class ReadabilityExtractor:
         return Article(
             url=article.get("url"),
             title=article.get("title"),
-            htmlContent=article.get("content"),
+            html_content=article.get("content"),
         )
