@@ -5,16 +5,16 @@ from markdownify import markdownify as md
 
 
 class Article:
-    def __init__(self, url: str, title: str, htmlContent: str):
+    def __init__(self, url: str, title: str, html_content: str):
         self.url = url
         self.title = title
-        self.htmlContent = htmlContent
+        self.html_content = html_content
 
     def to_markdown(self, including_title: bool = True) -> str:
         markdown = ""
         if including_title:
             markdown += f"# {self.title}\n\n"
-        markdown += md(self.htmlContent)
+        markdown += md(self.html_content)
         return markdown
 
     def to_message_content(self) -> list[dict[str, str]]:
