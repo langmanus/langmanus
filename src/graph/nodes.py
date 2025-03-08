@@ -4,7 +4,7 @@ from langchain_core.messages import HumanMessage
 from langgraph.types import Command
 from langgraph.graph import END
 
-from src.agents import research_agent, code_agent
+from src.agents import research_agent, code_agent, file_manager_agent
 from src.agents.llm import llm
 from src.config import TEAM_MEMBERS, SUPERVISOR_PROMPT
 from .types import State, Router
@@ -36,6 +36,21 @@ def code_node(state: State) -> Command[Literal["supervisor"]]:
         update={
             "messages": [
                 HumanMessage(content=result["messages"][-1].content, name="coder")
+            ]
+        },
+        goto="supervisor",
+    )
+
+def file_manager_node(state: State) -> Command[Literal["supervisor"]]:
+    """Node for the file manager agent that handles file operations."""
+    logger.info("File manager agent starting task")
+    result = file_manager_agent.invoke(state)
+    logger.info("File manager agent completed task")
+    logger.debug(f"File manager agent response: {result['messages'][-1].content}")
+    return Command(
+        update={
+            "messages": [
+                HumanMessage(content=result["messages"][-1].content, name="file_manager")
             ]
         },
         goto="supervisor",
