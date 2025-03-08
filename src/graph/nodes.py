@@ -16,6 +16,7 @@ def research_node(state: State) -> Command[Literal["supervisor"]]:
     logger.info("Research agent starting task")
     result = research_agent.invoke(state)
     logger.info("Research agent completed task")
+    logger.debug(f"Research agent response: {result['messages'][-1].content}")
     return Command(
         update={
             "messages": [
@@ -30,6 +31,7 @@ def code_node(state: State) -> Command[Literal["supervisor"]]:
     logger.info("Code agent starting task")
     result = code_agent.invoke(state)
     logger.info("Code agent completed task")
+    logger.debug(f"Code agent response: {result['messages'][-1].content}")
     return Command(
         update={
             "messages": [
@@ -47,6 +49,9 @@ def supervisor_node(state: State) -> Command[Literal[*TEAM_MEMBERS, "__end__"]]:
     ] + state["messages"]
     response = llm.with_structured_output(Router).invoke(messages)
     goto = response["next"]
+    logger.debug(f"Current state messages: {state['messages']}")
+    logger.debug(f"Supervisor response: {response}")
+    
     if goto == "FINISH":
         goto = END
         logger.info("Workflow completion decided by supervisor")
