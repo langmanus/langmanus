@@ -1,6 +1,6 @@
-# Lang-Manus
+# LangManus
 
-Lang-Manus is an AI-powered automation framework that combines language models with specialized tools for tasks like web search, crawling, and Python code execution.
+LangManus is an AI-powered automation framework that combines language models with specialized tools for tasks like web search, crawling, and Python code execution.
 
 ## Features
 
@@ -19,7 +19,7 @@ Lang-Manus is an AI-powered automation framework that combines language models w
 
 ### Install Dependencies
 
-Manus leverages [uv](https://github.com/astral-sh/uv) as its package manager to streamline dependency management.
+LangManus leverages [uv](https://github.com/astral-sh/uv) as its package manager to streamline dependency management.
 Follow the steps below to set up a virtual environment and install the necessary dependencies:
 
 ```bash
@@ -40,7 +40,7 @@ By completing these steps, you'll ensure your environment is properly configured
 
 ### Configure Environment Variables
 
-Manus relies on the following APIs by default:
+LangManus relies on the following APIs by default:
 - [**OpenAI**](https://platform.openai.com/api-keys): Serves as the LLM (Large Language Model) provider.
 - [**Tavily**](https://tavily.com/): Facilitates web search functionality.
 - [**Jina**](https://jina.ai/): Enables web crawling capabilities.
@@ -69,7 +69,7 @@ cp .env.example .env
 
 ### Basic Execution
 
-To run Manus with default settings:
+To run LangManus with default settings:
 
 ```bash
 uv run main.py
@@ -77,7 +77,7 @@ uv run main.py
 
 ### Advanced Configuration
 
-Manus can be customized through various configuration options in the `src/config` directory:
+LangManus can be customized through various configuration options in the `src/config` directory:
 - `tools.py`: Configure available tools and their settings
 - `env.py`: Manage environment variables and API configurations
 
