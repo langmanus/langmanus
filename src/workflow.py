@@ -26,6 +26,9 @@ def run_agent_workflow(user_input: str, debug: bool = False):
     Returns:
         The final state after the workflow completes
     """
+    if not user_input:
+        raise ValueError("Input could not be empty")
+
     if debug:
         enable_debug_logging()
         
