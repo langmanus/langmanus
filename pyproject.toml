@@ -1,7 +1,7 @@
 [project]
-name = "langgraph-demo"
+name = "lang-manus"
 version = "0.1.0"
-description = "Add your description here"
+description = "Lang-Manus project"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

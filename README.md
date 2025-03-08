@@ -1,10 +1,10 @@
-# Manus
+# Lang-Manus
 
-Manus is an AI-powered automation framework that combines language models with specialized tools for tasks like web search, crawling, and Python code execution.
+Lang-Manus is an AI-powered automation framework that combines language models with specialized tools for tasks like web search, crawling, and Python code execution.
 
 ## Features
 
-- 🤖 LLM-powered automation using OpenAI
+- 🤖 LLM-powered automation using Qwen/OpenAI
 - 🔍 Web search capabilities via Tavily
 - 🕷️ Web crawling support through Jina
 - 🐍 Python code execution and REPL integration
@@ -14,7 +14,7 @@ Manus is an AI-powered automation framework that combines language models with s
 
 ### Prerequisites
 
-- Python 3.8 or higher
+- Python 3.12 or higher
 - [uv](https://github.com/astral-sh/uv) package manager
 
 ### Install Dependencies
