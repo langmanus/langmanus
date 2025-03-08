@@ -5,8 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "httpx>=0.28.1",
     "langchain-community>=0.3.19",
     "langchain-experimental>=0.3.4",
     "langchain-openai>=0.3.8",
     "langgraph>=0.3.5",
+    "socksio>=1.0.0",
 ]
