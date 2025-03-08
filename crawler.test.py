@@ -1,9 +1,9 @@
-from src.crawler.crawler_tool import CrawlerTool
+from src.crawler import Crawler
 
 if __name__ == "__main__":
-    tool = CrawlerTool()
+    crawler = Crawler()
     print(
-        tool.execute(
+        crawler.crawl(
             "https://finance.sina.com.cn/stock/relnews/us/2024-08-15/doc-incitsya6536375.shtml"
         )
     )

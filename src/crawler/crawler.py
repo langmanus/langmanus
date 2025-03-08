@@ -1,12 +1,10 @@
+from .article import Article
 from .jina_client import JinaClient
 from .readability_extractor import ReadabilityExtractor
 
 
-class CrawlerTool:
-    name: str = "Crawler"
-    description: str = "Crawl the web for information"
-
-    def execute(self, url: str) -> list[dict[str, str]]:
+class Crawler:
+    def crawl(self, url: str) -> Article:
         # To help LLMs better understand content, we extract clean
         # articles from HTML, convert them to markdown, and split
         # them into text and image blocks for one single and unified
@@ -18,8 +16,7 @@ class CrawlerTool:
         # Instead of using Jina's own markdown converter, we'll use
         # our own solution to get better readability results.
         jina_client = JinaClient()
-        html = jina_client.crawl_html(url)
+        html = jina_client.crawl(url, return_format="html")
         extractor = ReadabilityExtractor()
         article = extractor.extract_article(html)
-        message_content = article.to_message_content()
-        return message_content
+        return article

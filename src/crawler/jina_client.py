@@ -4,11 +4,11 @@ import requests
 
 
 class JinaClient:
-    def crawl_html(self, url: str) -> str:
+    def crawl(self, url: str, return_format: str = "html") -> str:
         url = "https://r.jina.ai/https://finance.sina.com.cn/stock/relnews/us/2024-08-15/doc-incitsya6536375.shtml"
         headers = {
             "Content-Type": "application/json",
-            "X-Return-Format": "html",
+            "X-Return-Format": return_format,
         }
         if os.getenv("JINA_API_KEY"):
             headers["Authorization"] = f"Bearer {os.getenv('JINA_API_KEY')}"
