@@ -19,18 +19,24 @@ Manus is an AI-powered automation framework that combines language models with s
 
 ### Install Dependencies
 
-Manus utilizes [uv](https://github.com/astral-sh/uv) as its package manager. To get started, set up a virtual environment and install the required dependencies:
+Manus leverages [uv](https://github.com/astral-sh/uv) as its package manager to streamline dependency management.
+Follow the steps below to set up a virtual environment and install the necessary dependencies:
 
 ```bash
-# Create and activate virtual environment
+# Step 1: Create and activate a virtual environment
 python -m venv .venv
-source .venv/bin/activate  # On Unix/macOS
-# OR
-.venv\Scripts\activate     # On Windows
 
-# Install dependencies
+# On Unix/macOS:
+source .venv/bin/activate
+
+# On Windows:
+.venv\Scripts\activate
+
+# Step 2: Install project dependencies
 uv sync
 ```
+
+By completing these steps, you'll ensure your environment is properly configured and ready for development.
 
 ### Configure Environment Variables
 
@@ -41,15 +47,20 @@ Manus relies on the following APIs by default:
 
 Create a `.env` file in the project root and configure the following environment variables:
 
-```plaintext
+```ini
 OPENAI_API_KEY=your_openai_api_key
 TAVILY_API_KEY=your_tavily_api_key
 JINA_API_KEY=your_jina_api_key
+```
 
-> If you wish to use a custom OpenAI API provider, you can specify the base URL by setting the `OPENAI_BASE_URL` environment variable.
-> Jina API key is optional. Provide your Jina API key to access a higher rate limit.
+> **Note:**
+>
+> - If you wish to use a custom OpenAI API provider, you can specify the base URL by setting the `OPENAI_BASE_URL`
+>   environment variable.
+> - Jina API key is optional. Provide your own key to access a higher rate limit.
 
-You can copy the `.env.example` file as a template:
+You can copy the `.env.example` file as a template to get started:
+
 ```bash
 cp .env.example .env
 ```
