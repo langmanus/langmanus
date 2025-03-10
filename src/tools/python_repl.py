@@ -9,9 +9,9 @@ logger = logging.getLogger(__name__)
 
 @tool
 def python_repl_tool(
-    code: Annotated[str, "The python code to execute to generate your chart."],
+    code: Annotated[str, "The python code to execute to do further analysis or calculation."],
 ):
-    """Use this to execute python code and do math. If you want to see the output of a value,
+    """Use this to execute python code and do data analysis or calculation. If you want to see the output of a value,
     you should print it out with `print(...)`. This is visible to the user."""
     logger.info("Executing Python code")
     try:

@@ -4,7 +4,7 @@ from langchain_core.messages import HumanMessage
 from langgraph.types import Command
 from langgraph.graph import END
 
-from src.agents import research_agent, code_agent, file_manager_agent
+from src.agents import research_agent, coder_agent, file_manager_agent
 from src.agents.llm import supervisor_llm
 from src.config import TEAM_MEMBERS, SUPERVISOR_PROMPT
 from .types import State, Router
@@ -29,7 +29,7 @@ def research_node(state: State) -> Command[Literal["supervisor"]]:
 def code_node(state: State) -> Command[Literal["supervisor"]]:
     """Node for the coder agent that executes Python code."""
     logger.info("Code agent starting task")
-    result = code_agent.invoke(state)
+    result = coder_agent.invoke(state)
     logger.info("Code agent completed task")
     logger.debug(f"Code agent response: {result['messages'][-1].content}")
     return Command(
