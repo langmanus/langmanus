@@ -2,12 +2,14 @@ import logging
 from typing import Annotated
 from langchain_core.tools import tool
 from langchain_experimental.utilities import PythonREPL
+from .decorators import log_io
 
 # Initialize REPL and logger
 repl = PythonREPL()
 logger = logging.getLogger(__name__)
 
 @tool
+@log_io
 def python_repl_tool(
     code: Annotated[str, "The python code to execute to do further analysis or calculation."],
 ):

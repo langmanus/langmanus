@@ -1,5 +1,10 @@
+import logging
 from langchain_community.tools.tavily_search import TavilySearchResults
 from src.config import TAVILY_MAX_RESULTS
+from .decorators import create_logged_tool
 
-# Initialize Tavily search tool
-tavily_tool = TavilySearchResults(max_results=TAVILY_MAX_RESULTS) 
+logger = logging.getLogger(__name__)
+
+# Initialize Tavily search tool with logging
+LoggedTavilySearch = create_logged_tool(TavilySearchResults)
+tavily_tool = LoggedTavilySearch(max_results=TAVILY_MAX_RESULTS) 

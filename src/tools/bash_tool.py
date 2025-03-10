@@ -2,11 +2,13 @@ import logging
 import subprocess
 from typing import Annotated
 from langchain_core.tools import tool
+from .decorators import log_io
 
 # Initialize logger
 logger = logging.getLogger(__name__)
 
 @tool
+@log_io
 def bash_tool(
     cmd: Annotated[str, "The bash command to be executed."],
 ):

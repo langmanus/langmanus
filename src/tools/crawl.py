@@ -3,6 +3,7 @@ from typing import Annotated
 
 from langchain_core.messages import HumanMessage
 from langchain_core.tools import tool
+from .decorators import log_io
 
 from src.crawler import Crawler
 
@@ -10,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 @tool
+@log_io
 def crawl_tool(
     url: Annotated[str, "The url to crawl."],
 ) -> HumanMessage:
