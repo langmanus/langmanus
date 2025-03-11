@@ -4,7 +4,7 @@ from langchain_core.messages import HumanMessage
 from langgraph.types import Command
 from langgraph.graph import END
 
-from src.agents import research_agent, coder_agent, file_manager_agent
+from src.agents import research_agent, coder_agent, file_manager_agent, browser_agent
 from src.agents.llm import supervisor_llm
 from src.config import TEAM_MEMBERS, SUPERVISOR_PROMPT
 from .types import State, Router
@@ -51,6 +51,21 @@ def file_manager_node(state: State) -> Command[Literal["supervisor"]]:
         update={
             "messages": [
                 HumanMessage(content=result["messages"][-1].content, name="file_manager")
+            ]
+        },
+        goto="supervisor",
+    )
+
+def browser_node(state: State) -> Command[Literal["supervisor"]]:
+    """Node for the browser agent that performs web browsing tasks."""
+    logger.info("Browser agent starting task")
+    result = browser_agent.invoke(state)
+    logger.info("Browser agent completed task")
+    logger.debug(f"Browser agent response: {result['messages'][-1].content}")
+    return Command(
+        update={
+            "messages": [
+                HumanMessage(content=result["messages"][-1].content, name="browser")
             ]
         },
         goto="supervisor",
