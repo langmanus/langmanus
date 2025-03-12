@@ -1,4 +1,5 @@
 import logging
+from src.config import TEAM_MEMBERS
 from src.graph import build_graph
 
 # Configure logging
@@ -36,7 +37,14 @@ def run_agent_workflow(user_input: str, debug: bool = False):
         enable_debug_logging()
 
     logger.info(f"Starting workflow with user input: {user_input}")
-    result = graph.invoke({"messages": [{"role": "user", "content": user_input}]})
+    result = graph.invoke(
+        {
+            # Constants
+            "TEAM_MEMBERS": TEAM_MEMBERS,
+            # Runtime Variables
+            "messages": [{"role": "user", "content": user_input}],
+        }
+    )
     logger.debug(f"Final workflow state: {result}")
     logger.info("Workflow completed successfully")
     return result

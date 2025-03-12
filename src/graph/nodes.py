@@ -6,7 +6,8 @@ from langgraph.graph import END
 
 from src.agents import research_agent, coder_agent, file_manager_agent, browser_agent
 from src.agents.llm import supervisor_llm
-from src.config import TEAM_MEMBERS, SUPERVISOR_PROMPT
+from src.config import TEAM_MEMBERS
+from src.prompts.template import apply_prompt_template
 from .types import State, Router
 
 logger = logging.getLogger(__name__)
@@ -81,9 +82,7 @@ def browser_node(state: State) -> Command[Literal["supervisor"]]:
 def supervisor_node(state: State) -> Command[Literal[*TEAM_MEMBERS, "__end__"]]:
     """Supervisor node that decides which agent should act next."""
     logger.info("Supervisor evaluating next action")
-    messages = [
-        {"role": "system", "content": SUPERVISOR_PROMPT},
-    ] + state["messages"]
+    messages = apply_prompt_template("supervisor", state)
     response = supervisor_llm.with_structured_output(Router).invoke(messages)
     goto = response["next"]
     logger.debug(f"Current state messages: {state['messages']}")

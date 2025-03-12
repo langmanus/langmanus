@@ -7,15 +7,10 @@ from .env import (
     AGENT_API_KEY,
     CHROME_INSTANCE_PATH,
 )
-from .agents import (
-    TEAM_MEMBERS,
-    SUPERVISOR_PROMPT,
-    RESEARCHER_PROMPT,
-    CODER_PROMPT,
-    FILE_MANAGER_PROMPT,
-    BROWSER_PROMPT,
-)
 from .tools import TAVILY_MAX_RESULTS
+
+# Team configuration
+TEAM_MEMBERS = ["researcher", "coder", "file_manager", "browser"]
 
 __all__ = [
     "SUPERVISOR_BASE_URL",
@@ -25,11 +20,6 @@ __all__ = [
     "AGENT_MODEL",
     "AGENT_API_KEY",
     "TEAM_MEMBERS",
-    "SUPERVISOR_PROMPT",
-    "RESEARCHER_PROMPT",
-    "BROWSER_PROMPT",
-    "CODER_PROMPT",
-    "FILE_MANAGER_PROMPT",
     "TAVILY_MAX_RESULTS",
     "CHROME_INSTANCE_PATH",
 ]

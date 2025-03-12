@@ -17,4 +17,8 @@ class Router(TypedDict):
 class State(MessagesState):
     """State for the agent system, extends MessagesState with next field."""
 
+    # Constants
+    TEAM_MEMBERS: list[str]
+
+    # Runtime Variables
     next: str
