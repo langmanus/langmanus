@@ -5,6 +5,7 @@ from .env import (
     AGENT_BASE_URL,
     AGENT_MODEL,
     AGENT_API_KEY,
+    CHROME_INSTANCE_PATH,
 )
 from .agents import (
     TEAM_MEMBERS,
@@ -30,4 +31,5 @@ __all__ = [
     "CODER_PROMPT",
     "FILE_MANAGER_PROMPT",
     "TAVILY_MAX_RESULTS",
+    "CHROME_INSTANCE_PATH",
 ]

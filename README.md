@@ -81,6 +81,9 @@ AGENT_BASE_URL=your_custom_base_url  # Optional
 # Tool API Keys
 TAVILY_API_KEY=your_tavily_api_key
 JINA_API_KEY=your_jina_api_key  # Optional
+
+# Browser Configuration
+CHROME_INSTANCE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome  # Optional, path to Chrome executable
 ```
 
 > **Note:**

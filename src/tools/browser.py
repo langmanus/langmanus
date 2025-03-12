@@ -3,10 +3,19 @@ import asyncio
 from pydantic import BaseModel, Field
 from typing import Optional, ClassVar, Type
 from langchain.tools import BaseTool
-from browser_use import AgentHistoryList
+from browser_use import AgentHistoryList, Browser, BrowserConfig
 from browser_use import Agent as BrowserAgent
 from src.agents.llm import agent_llm
 from src.tools.decorators import create_logged_tool
+from src.config import CHROME_INSTANCE_PATH
+
+expected_browser = None
+
+# Use Chrome instance if specified
+if CHROME_INSTANCE_PATH:
+    expected_browser = Browser(
+        config=BrowserConfig(chrome_instance_path=CHROME_INSTANCE_PATH)
+    )
 
 
 class BrowserUseInput(BaseModel):
@@ -29,6 +38,7 @@ class BrowserTool(BaseTool):
         self._agent = BrowserAgent(
             task=instruction,  # Will be set per request
             llm=agent_llm,
+            browser=expected_browser,
         )
         try:
             loop = asyncio.new_event_loop()
