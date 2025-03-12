@@ -10,29 +10,30 @@ from src.tools import (
     write_file_tool,
 )
 
-from .llm import agent_llm as llm
+from .llm import get_llm_by_type
+from src.config.agents import AGENT_LLM_MAP
 
-# Create specialized agents
+# Create agents using configured LLM types
 research_agent = create_react_agent(
-    llm,
+    get_llm_by_type(AGENT_LLM_MAP["researcher"]),
     tools=[tavily_tool, crawl_tool],
     prompt=lambda state: apply_prompt_template("researcher", state),
 )
 
 coder_agent = create_react_agent(
-    llm,
+    get_llm_by_type(AGENT_LLM_MAP["coder"]),
     tools=[python_repl_tool, bash_tool],
     prompt=lambda state: apply_prompt_template("coder", state),
 )
 
 file_manager_agent = create_react_agent(
-    llm,
+    get_llm_by_type(AGENT_LLM_MAP["file_manager"]),
     tools=[write_file_tool],
     prompt=lambda state: apply_prompt_template("file_manager", state),
 )
 
 browser_agent = create_react_agent(
-    llm,
+    get_llm_by_type(AGENT_LLM_MAP["browser"]),
     tools=[browser_tool],
     prompt=lambda state: apply_prompt_template("browser", state),
 )

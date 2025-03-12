@@ -5,7 +5,7 @@ from typing import Optional, ClassVar, Type
 from langchain.tools import BaseTool
 from browser_use import AgentHistoryList, Browser, BrowserConfig
 from browser_use import Agent as BrowserAgent
-from src.agents.llm import agent_llm
+from src.agents.llm import vl_llm
 from src.tools.decorators import create_logged_tool
 from src.config import CHROME_INSTANCE_PATH
 
@@ -37,7 +37,7 @@ class BrowserTool(BaseTool):
         """Run the browser task synchronously."""
         self._agent = BrowserAgent(
             task=instruction,  # Will be set per request
-            llm=agent_llm,
+            llm=vl_llm,
             browser=expected_browser,
         )
         try:
@@ -58,7 +58,7 @@ class BrowserTool(BaseTool):
     async def _arun(self, instruction: str) -> str:
         """Run the browser task asynchronously."""
         self._agent = BrowserAgent(
-            task=instruction, llm=agent_llm  # Will be set per request
+            task=instruction, llm=vl_llm  # Will be set per request
         )
         try:
             result = await self._agent.run()

@@ -1,8 +1,48 @@
 # LangManus
 
-> Come From Open Source, Back to Open Source
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+> A hierarchical multi-agent framework for AI automation powered by LLMs
 
 LangManus is a community-driven AI automation framework that builds upon the incredible work of the open source community. Our goal is to combine language models with specialized tools for tasks like web search, crawling, and Python code execution, while giving back to the community that made this possible.
+
+## Table of Contents
+- [Quick Start](#quick-start)
+- [Architecture](#architecture)
+- [Features](#features)
+- [Why LangManus?](#why-langmanus)
+- [Setup](#setup)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- [Usage](#usage)
+- [Development](#development)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/langmanus.git
+cd langmanus
+
+# Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+uv sync
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your API keys
+
+# Run the project
+uv run main.py
+```
 
 ## Architecture
 
@@ -19,11 +59,29 @@ The system consists of:
 
 ## Features
 
-- 🤖 LLM-powered automation using open source models like Qwen (with OpenAI compatibility)
-- 🔍 Web search capabilities via Tavily
-- 🕷️ Web crawling support through Jina
-- 🐍 Python code execution and REPL integration
-- 📊 Workflow graph visualization and management
+### Core Capabilities
+- 🤖 **LLM Integration**
+  - Support for open source models like Qwen
+  - OpenAI-compatible API interface
+  - Multi-tier LLM system for different task complexities
+
+### Tools and Integrations
+- 🔍 **Search and Retrieval**
+  - Web search via Tavily API
+  - Neural search with Jina
+  - Advanced content extraction
+
+### Development Features
+- 🐍 **Python Integration**
+  - Built-in Python REPL
+  - Code execution environment
+  - Package management with uv
+
+### Workflow Management
+- 📊 **Visualization and Control**
+  - Workflow graph visualization
+  - Multi-agent orchestration
+  - Task delegation and monitoring
 
 ## Why LangManus?
 
@@ -42,7 +100,7 @@ We're committed to giving back to the community and welcome contributions of all
 - Python 3.12 or higher
 - [uv](https://github.com/astral-sh/uv) package manager
 
-### Install Dependencies
+### Installation
 
 LangManus leverages [uv](https://github.com/astral-sh/uv) as its package manager to streamline dependency management.
 Follow the steps below to set up a virtual environment and install the necessary dependencies:
@@ -63,20 +121,25 @@ uv sync
 
 By completing these steps, you'll ensure your environment is properly configured and ready for development.
 
-### Configure Environment Variables
+### Configuration
 
-LangManus uses a two-tier LLM system with separate configurations for supervisor and agent roles. Create a `.env` file in the project root and configure the following environment variables:
+LangManus uses a three-tier LLM system with separate configurations for reasoning, basic tasks, and vision-language tasks. Create a `.env` file in the project root and configure the following environment variables:
 
 ```ini
-# Supervisor LLM Configuration (defaults to qwen-max-latest)
-SUPERVISOR_MODEL=qwen-max-latest
-SUPERVISOR_API_KEY=your_supervisor_api_key
-SUPERVISOR_BASE_URL=your_custom_base_url  # Optional
+# Reasoning LLM Configuration (for complex reasoning tasks)
+REASONING_MODEL=your_reasoning_model
+REASONING_API_KEY=your_reasoning_api_key
+REASONING_BASE_URL=your_custom_base_url  # Optional
 
-# Agent LLM Configuration (defaults to qwen2.5-vl-72b-instruct)
-AGENT_MODEL=qwen2.5-vl-72b-instruct
-AGENT_API_KEY=your_agent_api_key
-AGENT_BASE_URL=your_custom_base_url  # Optional
+# Basic LLM Configuration (for simpler tasks)
+BASIC_MODEL=your_basic_model
+BASIC_API_KEY=your_basic_api_key
+BASIC_BASE_URL=your_custom_base_url  # Optional
+
+# Vision-Language LLM Configuration (for tasks involving images)
+VL_MODEL=your_vl_model
+VL_API_KEY=your_vl_api_key
+VL_BASE_URL=your_custom_base_url  # Optional
 
 # Tool API Keys
 TAVILY_API_KEY=your_tavily_api_key
@@ -88,9 +151,12 @@ CHROME_INSTANCE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrom
 
 > **Note:**
 >
-> - The system uses different models for supervision (Qwen-max by default) and agent tasks (Qwen-VL by default)
-> - You can customize the base URLs for both supervisor and agent LLMs independently
-> - Supervisor and agent can use different API keys if needed
+> - The system uses different models for different types of tasks:
+>   - Reasoning LLM for complex decision-making and analysis
+>   - Basic LLM for simpler text-based tasks
+>   - Vision-Language LLM for tasks involving image understanding
+> - You can customize the base URLs for all LLMs independently
+> - Each LLM can use different API keys if needed
 > - Jina API key is optional. Provide your own key to access a higher rate limit
 > - Tavily search is configured to return a maximum of 5 results by default
 
@@ -167,21 +233,36 @@ The prompts system uses a template engine ([`src/prompts/template.py`](src/promp
 
 Each agent's prompt is defined in a separate markdown file, making it easy to modify behavior and responsibilities without changing the underlying code.
 
+## Development
+
+### Testing
+
+Run the test suite:
+
+```bash
+# Run all tests
+make test
+
+# Run specific test file
+pytest tests/integration/test_workflow.py
+
+# Run with coverage
+make coverage
+```
+
+### Code Quality
+
+```bash
+# Run linting
+make lint
+
+# Format code
+make format
+```
+
 ## Contributing
 
-We welcome contributions of all kinds! Whether you're fixing a typo, improving documentation, or adding a new feature, your help is appreciated. Here's how you can contribute:
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-Please feel free to:
-- Report bugs or suggest features through issues
-- Improve documentation
-- Share your experience using LangManus
-- Help others in discussions
+We welcome contributions of all kinds! Whether you're fixing a typo, improving documentation, or adding a new feature, your help is appreciated. Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
 
 ## License
 
