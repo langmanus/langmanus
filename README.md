@@ -136,6 +136,37 @@ LangManus can be customized through various configuration files in the `src/conf
 - `tools.py`: Adjust tool-specific settings (e.g., Tavily search results limit)
 - `agents.py`: Modify team composition and agent system prompts
 
+### Agent Prompts System
+
+LangManus uses a sophisticated prompting system in the `src/prompts` directory to define agent behaviors and responsibilities:
+
+#### Core Agent Roles
+
+- **Supervisor ([`src/prompts/supervisor.md`](src/prompts/supervisor.md))**: Coordinates the team and delegates tasks by analyzing requests and determining which specialist should handle them. Makes decisions about task completion and workflow transitions.
+
+- **Researcher ([`src/prompts/researcher.md`](src/prompts/researcher.md))**: Specializes in information gathering through web searches and data collection. Uses Tavily search and web crawling capabilities while avoiding mathematical computations or file operations.
+
+- **Coder ([`src/prompts/coder.md`](src/prompts/coder.md))**: Professional software engineer role focused on Python and bash scripting. Handles:
+  - Python code execution and analysis
+  - Shell command execution
+  - Technical problem-solving and implementation
+
+- **File Manager ([`src/prompts/file_manager.md`](src/prompts/file_manager.md))**: Handles all file system operations with a focus on properly formatting and saving content in markdown format.
+
+- **Browser ([`src/prompts/browser.md`](src/prompts/browser.md))**: Web interaction specialist that handles:
+  - Website navigation
+  - Page interaction (clicking, typing, scrolling)
+  - Content extraction from web pages
+
+#### Prompt System Architecture
+
+The prompts system uses a template engine ([`src/prompts/template.py`](src/prompts/template.py)) that:
+- Loads role-specific markdown templates
+- Handles variable substitution (e.g., current time, team member information)
+- Formats system prompts for each agent
+
+Each agent's prompt is defined in a separate markdown file, making it easy to modify behavior and responsibilities without changing the underlying code.
+
 ## Contributing
 
 We welcome contributions of all kinds! Whether you're fixing a typo, improving documentation, or adding a new feature, your help is appreciated. Here's how you can contribute:
