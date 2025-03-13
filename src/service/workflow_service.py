@@ -51,23 +51,64 @@ async def run_agent_workflow(user_input: str, debug: bool = False):
         node = "" if (event.get("metadata").get("checkpoint_ns")
                       is None) else event.get("metadata").get("checkpoint_ns").split(":")[0]
 
-        print()
-        if name == "_write":
+        if kind == "on_chain_start" and name in ["supervisor", "researcher", "coder", "file_manager", "browser"]:
+            ydata = {
+                "event": kind,
+                "data": {
+                    "agent_name": name,
+                    "input": data.get("input")
+                }
+            }
+        elif kind == "on_chain_end" and name in ["supervisor", "researcher", "coder", "file_manager", "browser"]:
+            ydata = {
+                "event": kind,
+                "data": {
+                    "agent_name": name,
+                    "output": data.get("output")
+                }
+            }
+        elif kind == "on_chat_model_start":
+            ydata = {
+                "event": kind,
+                "data": {
+                    "agent_name": node,
+                    "input": data.get("input")
+                }
+            }
+        elif kind == "on_chat_model_end":
+            ydata = {
+                "event": kind,
+                "data": {
+                    "agent_name": node,
+                    "output": data.get("output")
+                }
+            }
+        elif kind == "on_chat_model_stream":
+            ydata = {
+                "event": kind,
+                "data": {
+                    "agent_name": node,
+                    "content": data["chunk"].content
+                }
+            }
+        elif kind == "on_tool_start":
+            ydata = {
+                "event": kind,
+                "data": {
+                    "agent_name": node,
+                    "tool_name": name,
+                    "input": data.get("input")
+                }
+            }
+        elif kind == "on_tool_end":
+            ydata = {
+                "event": kind,
+                "data": {
+                    "agent_name": node,
+                    "name": name,
+                    "output": data.get("output")
+                }
+            }
+        else:
             continue
-        # if kind in ("on_chat_model_start", "on_chat_model_end", "on_llm_start",
-        #             "on_llm_stream", "on_llm_end", "on_chain_start", "on_chain_stream", "on_chain_end", "on_tool_start", "on_tool_end", "on_retriever_start", "on_retriever_end", "on_prompt_start", "on_prompt_end"):
-        #
-        # elif kind == "on_chat_model_stream":
-        #     ydata = {
-        #         "kind": kind,
-        #         "name": name,
-        #         "node": event.get("metadata").get("langgraph_node"),
-        #         "data": event["data"]["chunk"].content
-        #     }
-        ydata = {
-            "id": "sfea",
-            "event": "test_dfeaw",
-            "data": data,
-        }
-
         yield ydata
