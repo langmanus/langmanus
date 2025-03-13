@@ -84,11 +84,14 @@ async def run_agent_workflow(user_input: str, debug: bool = False):
                 }
             }
         elif kind == "on_chat_model_stream":
+            content =  data["chunk"].content
+            if content is None or content == "":
+                continue
             ydata = {
                 "event": kind,
                 "data": {
                     "agent_name": node,
-                    "content": data["chunk"].content
+                    "content": content
                 }
             }
         elif kind == "on_tool_start":
