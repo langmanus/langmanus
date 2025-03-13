@@ -23,6 +23,7 @@ LangManus 是一个社区驱动的 AI 自动化框架，它建立在开源社区
 - [贡献](#贡献)
 - [许可证](#许可证)
 - [致谢](#致谢)
+- [API 服务器](#api-服务器)
 
 ## 快速开始
 
@@ -198,6 +199,33 @@ ln -s ../../pre-commit .git/hooks/pre-commit
 ```bash
 uv run main.py
 ```
+
+### API 服务器
+
+LangManus 提供基于 FastAPI 的 API 服务器，支持流式响应：
+
+```bash
+# 启动 API 服务器
+make serve
+
+# 或直接运行
+python server.py
+```
+
+API 服务器提供以下端点：
+
+- `POST /api/chat/stream`：用于 LangGraph 调用的聊天端点，流式响应
+  - 请求体：
+    ```json
+    {
+      "messages": [
+        {"role": "user", "content": "在此输入您的查询"}
+      ],
+      "debug": false
+    }
+    ```
+  - 返回包含智能体响应的服务器发送事件（SSE）流
+
 
 ### 高级配置
 

@@ -209,14 +209,13 @@ python server.py
 
 The API server exposes the following endpoints:
 
-- `POST /api/chat`: Chat endpoint for LangGraph invoke with streaming support
+- `POST /api/chat/stream`: Chat endpoint for LangGraph invoke with streaming support
   - Request body:
     ```json
     {
       "messages": [
         {"role": "user", "content": "Your query here"}
       ],
-      "stream": true,
       "debug": false
     }
     ```

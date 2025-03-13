@@ -39,6 +39,7 @@ async def run_agent_workflow(user_input: str, debug: bool = False):
 
     logger.info(f"Starting workflow with user input: {user_input}")
 
+    # TODO: extract message content from object, specifically for on_chat_model_stream
     async for event in graph.astream_events(
         {
             # Constants
