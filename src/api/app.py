@@ -4,7 +4,7 @@ FastAPI application for LangManus.
 
 import json
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Union
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,6 +15,7 @@ from typing import AsyncGenerator, Dict, List, Any
 
 from src.graph import build_graph
 from src.config import TEAM_MEMBERS
+from src.service.workflow_service import run_agent_workflow
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -39,76 +40,25 @@ app.add_middleware(
 graph = build_graph()
 
 
+class ContentItem(BaseModel):
+    type: str = Field(..., description="The type of content (text, image, etc.)")
+    text: Optional[str] = Field(None, description="The text content if type is 'text'")
+    image_url: Optional[str] = Field(None, description="The image URL if type is 'image'")
+
+
 class ChatMessage(BaseModel):
     role: str = Field(..., description="The role of the message sender (user or assistant)")
-    content: str = Field(..., description="The content of the message")
+    content: Union[str, List[ContentItem]] = Field(
+        ..., description="The content of the message, either a string or a list of content items"
+    )
 
 
 class ChatRequest(BaseModel):
     messages: List[ChatMessage] = Field(..., description="The conversation history")
-    stream: bool = Field(True, description="Whether to stream the response")
     debug: Optional[bool] = Field(False, description="Whether to enable debug logging")
 
 
-async def stream_graph_response(
-    messages: List[Dict[str, str]], debug: bool = False
-) -> AsyncGenerator[Dict[str, Any], None]:
-    """
-    Stream the response from the LangGraph workflow.
-    
-    Args:
-        messages: The conversation history
-        debug: Whether to enable debug logging
-        
-    Yields:
-        The streamed response chunks
-    """
-    # Configure the graph for streaming
-    config = {"recursion_limit": 25}
-    stream_graph = graph.stream(
-        {
-            # Constants
-            "TEAM_MEMBERS": TEAM_MEMBERS,
-            # Runtime Variables
-            "messages": messages,
-        },
-        config=config,
-    )
-    
-    try:
-        # Stream the response
-        async for chunk in stream_graph:
-            # Extract the relevant information from the chunk
-            node = chunk.get("node")
-            if node:
-                yield {
-                    "type": "node",
-                    "node": node,
-                }
-            
-            # If there are new messages, yield them
-            state = chunk.get("state", {})
-            if state and "messages" in state:
-                messages = state["messages"]
-                if messages and len(messages) > 0:
-                    # Get the latest message
-                    latest_message = messages[-1]
-                    yield {
-                        "type": "message",
-                        "message": {
-                            "role": latest_message.get("role", "assistant"),
-                            "content": latest_message.get("content", ""),
-                        },
-                    }
-    except Exception as e:
-        logger.error(f"Error streaming response: {e}")
-        yield {
-            "type": "error",
-            "error": str(e),
-        }
-
-
-@app.post("/api/chat")
+@app.post("/api/chat/stream")
 async def chat_endpoint(request: ChatRequest):
     """
     Chat endpoint for LangGraph invoke.
@@ -120,33 +70,34 @@ async def chat_endpoint(request: ChatRequest):
         The streamed response
     """
     try:
-        # Convert Pydantic models to dictionaries
-        messages = [{"role": msg.role, "content": msg.content} for msg in request.messages]
+        # Convert Pydantic models to dictionaries and normalize content format
+        messages = []
+        for msg in request.messages:
+            message_dict = {"role": msg.role}
+            
+            # Handle both string content and list of content items
+            if isinstance(msg.content, str):
+                message_dict["content"] = msg.content
+            else:
+                # For content as a list, convert to the format expected by the workflow
+                content_items = []
+                for item in msg.content:
+                    if item.type == "text" and item.text:
+                        content_items.append({"type": "text", "text": item.text})
+                    elif item.type == "image" and item.image_url:
+                        content_items.append({"type": "image", "image_url": item.image_url})
+                
+                message_dict["content"] = content_items
+            
+            messages.append(message_dict)
         
-        # If streaming is enabled, return a streaming response
-        if request.stream:
-            return EventSourceResponse(
-                stream_graph_response(messages, request.debug),
-                media_type="text/event-stream",
-            )
+        # Combine the messages into a single string
+        messages_str = "\n".join([f"{msg['content']}" for msg in messages])
         
-        # Otherwise, return a regular response
-        result = graph.invoke(
-            {
-                # Constants
-                "TEAM_MEMBERS": TEAM_MEMBERS,
-                # Runtime Variables
-                "messages": messages,
-            }
+        return EventSourceResponse(
+            run_agent_workflow(messages_str, request.debug),
+            media_type="text/event-stream",
         )
-        
-        # Extract the final messages from the result
-        final_messages = result.get("messages", [])
-        
-        # Return the final messages
-        return {
-            "messages": final_messages,
-        }
     except Exception as e:
         logger.error(f"Error in chat endpoint: {e}")
         raise HTTPException(status_code=500, detail=str(e)) 

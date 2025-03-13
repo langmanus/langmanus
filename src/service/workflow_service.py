@@ -65,16 +65,9 @@ async def run_agent_workflow(user_input: str, debug: bool = False):
         #         "data": event["data"]["chunk"].content
         #     }
         ydata = {
-            "kind": kind,
-            "name": name,
+            "id": "sfea",
+            "event": "test_dfeaw",
             "data": data,
-            "node": node,
         }
 
         yield ydata
-
-
-
-    # logger.debug(f"Final workflow state: {result}")
-    # logger.info("Workflow completed successfully")
-    # return result

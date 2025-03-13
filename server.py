@@ -4,7 +4,6 @@ Server script for running the LangManus API.
 
 import logging
 import uvicorn
-from src.api.app import app
 
 # Configure logging
 logging.basicConfig(
