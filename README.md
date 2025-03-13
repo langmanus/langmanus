@@ -195,6 +195,33 @@ To run LangManus with default settings:
 uv run main.py
 ```
 
+### API Server
+
+LangManus provides a FastAPI-based API server with streaming support:
+
+```bash
+# Start the API server
+make serve
+
+# Or run directly
+python server.py
+```
+
+The API server exposes the following endpoints:
+
+- `POST /api/chat`: Chat endpoint for LangGraph invoke with streaming support
+  - Request body:
+    ```json
+    {
+      "messages": [
+        {"role": "user", "content": "Your query here"}
+      ],
+      "stream": true,
+      "debug": false
+    }
+    ```
+  - Returns a Server-Sent Events (SSE) stream with the agent's responses
+
 ### Advanced Configuration
 
 LangManus can be customized through various configuration files in the `src/config` directory:
