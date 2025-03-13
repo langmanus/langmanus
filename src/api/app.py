@@ -43,13 +43,18 @@ graph = build_graph()
 class ContentItem(BaseModel):
     type: str = Field(..., description="The type of content (text, image, etc.)")
     text: Optional[str] = Field(None, description="The text content if type is 'text'")
-    image_url: Optional[str] = Field(None, description="The image URL if type is 'image'")
+    image_url: Optional[str] = Field(
+        None, description="The image URL if type is 'image'"
+    )
 
 
 class ChatMessage(BaseModel):
-    role: str = Field(..., description="The role of the message sender (user or assistant)")
+    role: str = Field(
+        ..., description="The role of the message sender (user or assistant)"
+    )
     content: Union[str, List[ContentItem]] = Field(
-        ..., description="The content of the message, either a string or a list of content items"
+        ...,
+        description="The content of the message, either a string or a list of content items",
     )
 
 
@@ -62,10 +67,10 @@ class ChatRequest(BaseModel):
 async def chat_endpoint(request: ChatRequest):
     """
     Chat endpoint for LangGraph invoke.
-    
+
     Args:
         request: The chat request
-        
+
     Returns:
         The streamed response
     """
@@ -74,7 +79,7 @@ async def chat_endpoint(request: ChatRequest):
         messages = []
         for msg in request.messages:
             message_dict = {"role": msg.role}
-            
+
             # Handle both string content and list of content items
             if isinstance(msg.content, str):
                 message_dict["content"] = msg.content
@@ -85,19 +90,21 @@ async def chat_endpoint(request: ChatRequest):
                     if item.type == "text" and item.text:
                         content_items.append({"type": "text", "text": item.text})
                     elif item.type == "image" and item.image_url:
-                        content_items.append({"type": "image", "image_url": item.image_url})
-                
+                        content_items.append(
+                            {"type": "image", "image_url": item.image_url}
+                        )
+
                 message_dict["content"] = content_items
-            
+
             messages.append(message_dict)
-        
+
         # Combine the messages into a single string
         messages_str = "\n".join([f"{msg['content']}" for msg in messages])
-        
+
         return EventSourceResponse(
             run_agent_workflow(messages_str, request.debug),
             media_type="text/event-stream",
         )
     except Exception as e:
         logger.error(f"Error in chat endpoint: {e}")
-        raise HTTPException(status_code=500, detail=str(e)) 
+        raise HTTPException(status_code=500, detail=str(e))
