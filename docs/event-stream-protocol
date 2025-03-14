@@ -1,0 +1,73 @@
+# Event Stream Protocol
+
+LangManus uses the standard [Event Stream Protocol](https://www.w3.org/TR/eventsource/) to stream events to the client.
+
+## Generic Events
+
+### Text Message
+
+### Image Message
+
+### Start of Workflow
+```yaml
+event: start_of_workflow
+data: {
+    "workflow_id": "1234567890",
+    "workflow_name": "研究一下南京汤包哪家最好吃?",
+}
+```
+
+### End of Workflow
+```yaml
+event: end_of_workflow
+data: {
+    "workflow_id": "1234567890",
+}
+```
+
+### Start of Agent
+```yaml
+event: start_of_agent
+data: {
+    "agent_id": "1234567890_supervisor",
+    "agent_name": "supervisor",
+}
+```
+
+### End of Agent
+```yaml
+event: end_of_agent
+data: {
+    "agent_id": "1234567890_supervisor",
+    "agent_name": "supervisor",
+}
+```
+
+### Tool Call
+```yaml
+event: tool_call
+data: {
+    "tool_call_id": "1234567890_tool_call_1",
+    "tool_name": "tool",
+    "tool_input": {...}
+}
+```
+
+### Tool Call Result
+```yaml
+event: tool_call_result
+data: {
+    "tool_call_id": "1234567890_tool_call_1",
+    "tool_result": {...}
+}
+```
+
+### Tool Call Result Error
+```yaml
+event: tool_call_result_error
+data: {
+    "tool_call_id": "1234567890_tool_call_1",
+    "error": {...}
+}
+```
+
