@@ -72,41 +72,42 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
             else str(metadata["langgraph_step"])
         )
 
-        if kind == "on_chain_start" and name in [
-            "supervisor",
-            "researcher",
-            "coder",
-            "file_manager",
-            "browser",
-        ]:
+        if kind == "on_chain_start" and name in TEAM_MEMBERS:
             ydata = {
                 "event": "start_of_agent",
                 "data": {"agent_name": name, "agent_id": f"{workflow_id}_{name}"},
             }
-        elif kind == "on_chain_end" and name in [
-            "supervisor",
-            "researcher",
-            "coder",
-            "file_manager",
-            "browser",
-        ]:
+        elif kind == "on_chain_end" and name in TEAM_MEMBERS:
             ydata = {
                 "event": "end_of_agent",
                 "data": {"agent_name": name, "agent_id": f"{workflow_id}_{name}"},
             }
-        elif kind == "on_chat_model_start":
+        elif (
+            kind == "on_chat_model_start" and metadata["langgraph_node"] in TEAM_MEMBERS
+        ):
             ydata = {
                 "event": "start_of_llm",
                 "data": {"agent_name": node},
             }
-        elif kind == "on_chat_model_end":
+        elif kind == "on_chat_model_end" and metadata["langgraph_node"] in TEAM_MEMBERS:
             ydata = {
                 "event": "end_of_llm",
                 "data": {"agent_name": node},
             }
-        elif kind == "on_chat_model_stream":
+        elif (
+            kind == "on_chat_model_stream"
+            and metadata["langgraph_node"] in TEAM_MEMBERS
+        ):
             content = data["chunk"].content
             if content is None or content == "":
+                if data["chunk"].tool_calls:
+                    yield {
+                        "event": "message",
+                        "data": {
+                            "message_id": data["chunk"].id,
+                            "delta": {"content": content},
+                        },
+                    }
                 continue
             ydata = {
                 "event": "message",
