@@ -5,8 +5,30 @@ LangManus uses the standard [Event Stream Protocol](https://www.w3.org/TR/events
 ## Generic Events
 
 ### Text Message
+```yaml
+event: message
+data: {
+    "message_id": "1234567890",
+    "delta": { "content": "Hello, " }
+}
+```
 
-### Image Message
+```yaml
+event: message
+data: {
+    "message_id": "1234567890",
+    "delta": { "content": "world" }
+}
+```
+
+```yaml
+event: message
+data: {
+    "message_id": "1234567890",
+    "delta": { "content": "!" },
+    "finish_reason":"stop"
+}
+```
 
 ### Start of Workflow
 ```yaml
