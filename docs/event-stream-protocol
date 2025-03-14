@@ -95,7 +95,7 @@ data: {
 event: tool_call_result
 data: {
     "tool_call_id": "1234567890_tool_call_1",
-    "tool_result": {...}
+    "tool_result": "result here"
 }
 ```
 
@@ -104,7 +104,7 @@ data: {
 event: tool_call_result_error
 data: {
     "tool_call_id": "1234567890_tool_call_1",
-    "error": {...}
+    "error": "error msg here"
 }
 ```
 

@@ -26,7 +26,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
     """Run the agent workflow with the given user input.
 
     Args:
-        user_input: The user's query or request
+        user_input_messages: The user request messages
         debug: If True, enables debug level logging
 
     Returns:
