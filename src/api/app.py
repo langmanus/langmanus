@@ -98,11 +98,8 @@ async def chat_endpoint(request: ChatRequest):
 
             messages.append(message_dict)
 
-        # Combine the messages into a single string
-        messages_str = "\n".join([f"{msg['content']}" for msg in messages])
-
         return EventSourceResponse(
-            run_agent_workflow(messages_str, request.debug),
+            run_agent_workflow(messages, request.debug),
             media_type="text/event-stream",
         )
     except Exception as e:

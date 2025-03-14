@@ -204,7 +204,7 @@ LangManus provides a FastAPI-based API server with streaming support:
 make serve
 
 # Or run directly
-python server.py
+uv run server.py
 ```
 
 The API server exposes the following endpoints:

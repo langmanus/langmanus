@@ -5,6 +5,14 @@ LangManus uses the standard [Event Stream Protocol](https://www.w3.org/TR/events
 ## Generic Events
 
 ### Text Message
+
+```yaml
+event: start_of_llm
+data: {
+    "agent_name": "supervisor",
+}
+```
+
 ```yaml
 event: message
 data: {
@@ -30,12 +38,19 @@ data: {
 }
 ```
 
+```yaml
+event: end_of_llm
+data: {
+    "agent_name": "supervisor",
+}
+```
+
 ### Start of Workflow
 ```yaml
 event: start_of_workflow
 data: {
     "workflow_id": "1234567890",
-    "workflow_name": "研究一下南京汤包哪家最好吃?",
+    "input": {"role": "user", "content": "研究一下南京汤包哪家最好吃?"},
 }
 ```
 

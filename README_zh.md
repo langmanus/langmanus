@@ -209,7 +209,7 @@ LangManus 提供基于 FastAPI 的 API 服务器，支持流式响应：
 make serve
 
 # 或直接运行
-python server.py
+uv run server.py
 ```
 
 API 服务器提供以下端点：
