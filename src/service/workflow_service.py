@@ -110,7 +110,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
                 continue
             ydata = {
                 "event": "message",
-                "data": {"agent_name": node, "content": content},
+                "data": {"message_id": data["chunk"].id, "delta": {"content": content}},
             }
         elif kind == "on_tool_start":
             ydata = {

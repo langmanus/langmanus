@@ -108,3 +108,43 @@ data: {
 }
 ```
 
+### Start of Report
+```yaml
+event: start_of_report
+data: {
+    "report_id": "1234567890_report"
+}
+```
+
+```yaml
+event: report_message
+data: {
+    "message_id": "1234567890",
+    "delta": { "content": "Hello, " }
+}
+```
+
+```yaml
+event: report_message
+data: {
+    "message_id": "1234567890",
+    "delta": { "content": "world" }
+}
+```
+
+```yaml
+event: report_message
+data: {
+    "message_id": "1234567890",
+    "delta": { "content": "!" },
+    "finish_reason":"stop"
+}
+```
+
+### End of Workflow
+```yaml
+event: end_of_report
+data: {
+    "report_id": "1234567890_report"
+}
+```
