@@ -101,6 +101,7 @@ async def chat_endpoint(request: ChatRequest):
         return EventSourceResponse(
             run_agent_workflow(messages, request.debug),
             media_type="text/event-stream",
+            sep="\n",
         )
     except Exception as e:
         logger.error(f"Error in chat endpoint: {e}")
