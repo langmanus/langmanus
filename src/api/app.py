@@ -98,8 +98,12 @@ async def chat_endpoint(request: ChatRequest):
 
             messages.append(message_dict)
 
+        async def event_generator():
+            async for event in run_agent_workflow(messages, request.debug):
+                yield json.dumps(event, ensure_ascii=False)
+
         return EventSourceResponse(
-            run_agent_workflow(messages, request.debug),
+            event_generator(),
             media_type="text/event-stream",
             sep="\n",
         )
