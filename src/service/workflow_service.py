@@ -82,32 +82,19 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
                 "event": "end_of_agent",
                 "data": {"agent_name": name, "agent_id": f"{workflow_id}_{name}"},
             }
-        elif (
-            kind == "on_chat_model_start" and metadata["langgraph_node"] in TEAM_MEMBERS
-        ):
+        elif kind == "on_chat_model_start" and node in TEAM_MEMBERS:
             ydata = {
                 "event": "start_of_llm",
                 "data": {"agent_name": node},
             }
-        elif kind == "on_chat_model_end" and metadata["langgraph_node"] in TEAM_MEMBERS:
+        elif kind == "on_chat_model_end" and node in TEAM_MEMBERS:
             ydata = {
                 "event": "end_of_llm",
                 "data": {"agent_name": node},
             }
-        elif (
-            kind == "on_chat_model_stream"
-            and metadata["langgraph_node"] in TEAM_MEMBERS
-        ):
+        elif kind == "on_chat_model_stream" and node in TEAM_MEMBERS:
             content = data["chunk"].content
             if content is None or content == "":
-                if data["chunk"].tool_calls:
-                    yield {
-                        "event": "message",
-                        "data": {
-                            "message_id": data["chunk"].id,
-                            "delta": {"content": content},
-                        },
-                    }
                 continue
             ydata = {
                 "event": "message",
