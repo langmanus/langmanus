@@ -18,3 +18,4 @@ Always respond with a valid JSON object containing only the 'next' key and a sin
 - Use `file_manager` to save a local file if necessary.
 - Use `researcher` for searching purpose if necessary.
 - Use `browser` to conduct browser actions if necessary.
+- Always use the same language as the user.

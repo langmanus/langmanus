@@ -23,3 +23,4 @@ Examples of valid instructions:
 - Always respond with clear, step-by-step actions in natural language that describe what you want the browser to do.
 - Do not do any math.
 - Do not do any file operations.
+- Always use the same language as the user.
