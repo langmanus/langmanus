@@ -42,6 +42,8 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
 
     workflow_id = str(uuid.uuid4())
 
+    streamed_agents = [*TEAM_MEMBERS, "reporter"]
+
     yield {
         "event": "start_of_workflow",
         "data": {"workflow_id": workflow_id, "input": user_input_messages},
@@ -72,27 +74,27 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
             else str(metadata["langgraph_step"])
         )
 
-        if kind == "on_chain_start" and name in TEAM_MEMBERS:
+        if kind == "on_chain_start" and name in streamed_agents:
             ydata = {
                 "event": "start_of_agent",
                 "data": {"agent_name": name, "agent_id": f"{workflow_id}_{name}"},
             }
-        elif kind == "on_chain_end" and name in TEAM_MEMBERS:
+        elif kind == "on_chain_end" and name in streamed_agents:
             ydata = {
                 "event": "end_of_agent",
                 "data": {"agent_name": name, "agent_id": f"{workflow_id}_{name}"},
             }
-        elif kind == "on_chat_model_start" and node in TEAM_MEMBERS:
+        elif kind == "on_chat_model_start" and node in streamed_agents:
             ydata = {
                 "event": "start_of_llm",
                 "data": {"agent_name": node},
             }
-        elif kind == "on_chat_model_end" and node in TEAM_MEMBERS:
+        elif kind == "on_chat_model_end" and node in streamed_agents:
             ydata = {
                 "event": "end_of_llm",
                 "data": {"agent_name": node},
             }
-        elif kind == "on_chat_model_stream" and node in TEAM_MEMBERS:
+        elif kind == "on_chat_model_stream" and node in streamed_agents:
             content = data["chunk"].content
             if content is None or content == "":
                 continue

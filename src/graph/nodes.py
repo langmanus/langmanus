@@ -80,7 +80,7 @@ def browser_node(state: State) -> Command[Literal["supervisor"]]:
     )
 
 
-def supervisor_node(state: State) -> Command[Literal[*TEAM_MEMBERS, "__end__"]]:
+def supervisor_node(state: State) -> Command[Literal[*TEAM_MEMBERS, "reporter"]]:
     """Supervisor node that decides which agent should act next."""
     logger.info("Supervisor evaluating next action")
     messages = apply_prompt_template("supervisor", state)
@@ -94,9 +94,22 @@ def supervisor_node(state: State) -> Command[Literal[*TEAM_MEMBERS, "__end__"]]:
     logger.debug(f"Supervisor response: {response}")
 
     if goto == "FINISH":
-        goto = END
-        logger.info("Workflow completion decided by supervisor")
+        goto = "reporter"
+        logger.info("Go to consolidate final report decided by supervisor")
     else:
         logger.info(f"Supervisor delegating to: {goto}")
 
     return Command(goto=goto, update={"next": goto})
+
+
+def reporter_node(state: State) -> Command[Literal["__end__"]]:
+    """Reporter node that write a final report."""
+    logger.info("Reporter write final report")
+    messages = apply_prompt_template("reporter", state)
+    response = get_llm_by_type(AGENT_LLM_MAP["reporter"]).invoke(messages)
+    logger.debug(f"Current state messages: {state['messages']}")
+    logger.debug(f"reporter response: {response}")
+
+    logger.info("Workflow completion")
+
+    return Command(goto=END, update={"next": END})
