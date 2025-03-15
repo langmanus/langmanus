@@ -59,6 +59,16 @@ data: {
 event: end_of_workflow
 data: {
     "workflow_id": "1234567890",
+    "messages": [
+        {
+            "role": "user",
+            "content": "what is MCP?"
+        },
+        {
+            "role": "user",
+            "content": "MCP is..."
+        }
+    ]
 }
 ```
 

@@ -100,7 +100,10 @@ async def chat_endpoint(request: ChatRequest):
 
         async def event_generator():
             async for event in run_agent_workflow(messages, request.debug):
-                yield {"event": event["event"], "data": json.dumps(event["data"])}
+                yield {
+                    "event": event["event"],
+                    "data": json.dumps(event["data"], ensure_ascii=False),
+                }
 
         return EventSourceResponse(
             event_generator(),

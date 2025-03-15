@@ -2,6 +2,7 @@ import logging
 
 from src.config import TEAM_MEMBERS
 from src.graph import build_graph
+from langchain_community.adapters.openai import convert_message_to_dict
 import uuid
 
 # Configure logging
@@ -73,16 +74,27 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
             if (metadata.get("langgraph_step") is None)
             else str(metadata["langgraph_step"])
         )
+        tool_checkpoint = (
+            ""
+            if (metadata.get("langgraph_checkpoint_ns") is None)
+            else metadata.get("langgraph_checkpoint_ns").split(":")[-1]
+        )
 
         if kind == "on_chain_start" and name in streamed_agents:
             ydata = {
                 "event": "start_of_agent",
-                "data": {"agent_name": name, "agent_id": f"{workflow_id}_{name}"},
+                "data": {
+                    "agent_name": name,
+                    "agent_id": f"{workflow_id}_{name}_{langgraph_step}",
+                },
             }
         elif kind == "on_chain_end" and name in streamed_agents:
             ydata = {
                 "event": "end_of_agent",
-                "data": {"agent_name": name, "agent_id": f"{workflow_id}_{name}"},
+                "data": {
+                    "agent_name": name,
+                    "agent_id": f"{workflow_id}_{name}_{langgraph_step}",
+                },
             }
         elif kind == "on_chat_model_start" and node in streamed_agents:
             ydata = {
@@ -106,7 +118,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
             ydata = {
                 "event": "tool_call",
                 "data": {
-                    "tool_call_id": f"{workflow_id}_{node}_{name}_{langgraph_step}",
+                    "tool_call_id": f"{workflow_id}_{node}_{name}_{tool_checkpoint}",
                     "tool_name": name,
                     "tool_input": data.get("input"),
                 },
@@ -115,7 +127,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
             ydata = {
                 "event": "tool_call_result",
                 "data": {
-                    "tool_call_id": f"{workflow_id}_{node}_{name}_{langgraph_step}",
+                    "tool_call_id": f"{workflow_id}_{node}_{name}_{tool_checkpoint}",
                     "tool_name": name,
                     "tool_result": data["output"].content if data.get("output") else "",
                 },
@@ -126,5 +138,11 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
 
     yield {
         "event": "end_of_workflow",
-        "data": {"workflow_id": workflow_id},
+        "data": {
+            "workflow_id": workflow_id,
+            "messages": [
+                convert_message_to_dict(msg)
+                for msg in data["output"].get("messages", [])
+            ],
+        },
     }
