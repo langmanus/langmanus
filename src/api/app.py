@@ -105,7 +105,6 @@ async def chat_endpoint(request: ChatRequest, req: Request):
                     # Check if client is still connected
                     if await req.is_disconnected():
                         logger.info("Client disconnected, stopping workflow")
-                        # TODO: You might want to add a method in workflow_service to handle early termination
                         break
                     yield {
                         "event": event["event"],

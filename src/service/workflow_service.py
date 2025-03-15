@@ -74,11 +74,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
             if (metadata.get("langgraph_step") is None)
             else str(metadata["langgraph_step"])
         )
-        tool_checkpoint = (
-            ""
-            if (metadata.get("langgraph_checkpoint_ns") is None)
-            else metadata.get("langgraph_checkpoint_ns").split(":")[-1]
-        )
+        run_id = "" if (event.get("run_id") is None) else str(event["run_id"])
 
         if kind == "on_chain_start" and name in streamed_agents:
             ydata = {
@@ -118,7 +114,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
             ydata = {
                 "event": "tool_call",
                 "data": {
-                    "tool_call_id": f"{workflow_id}_{node}_{name}_{tool_checkpoint}",
+                    "tool_call_id": f"{workflow_id}_{node}_{name}_{run_id}",
                     "tool_name": name,
                     "tool_input": data.get("input"),
                 },
@@ -127,7 +123,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
             ydata = {
                 "event": "tool_call_result",
                 "data": {
-                    "tool_call_id": f"{workflow_id}_{node}_{name}_{tool_checkpoint}",
+                    "tool_call_id": f"{workflow_id}_{node}_{name}_{run_id}",
                     "tool_name": name,
                     "tool_result": data["output"].content if data.get("output") else "",
                 },
