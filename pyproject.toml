@@ -22,6 +22,9 @@ dependencies = [
     "fastapi>=0.110.0",
     "uvicorn>=0.27.1",
     "sse-starlette>=1.6.5",
+    "pandas>=2.2.3",
+    "numpy>=2.2.3",
+    "yfinance>=0.2.54",
 ]
 
 [project.optional-dependencies]
