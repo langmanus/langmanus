@@ -64,12 +64,13 @@ class ChatRequest(BaseModel):
 
 
 @app.post("/api/chat/stream")
-async def chat_endpoint(request: ChatRequest):
+async def chat_endpoint(request: ChatRequest, req: Request):
     """
     Chat endpoint for LangGraph invoke.
 
     Args:
         request: The chat request
+        req: The FastAPI request object for connection state checking
 
     Returns:
         The streamed response
@@ -99,11 +100,20 @@ async def chat_endpoint(request: ChatRequest):
             messages.append(message_dict)
 
         async def event_generator():
-            async for event in run_agent_workflow(messages, request.debug):
-                yield {
-                    "event": event["event"],
-                    "data": json.dumps(event["data"], ensure_ascii=False),
-                }
+            try:
+                async for event in run_agent_workflow(messages, request.debug):
+                    # Check if client is still connected
+                    if await req.is_disconnected():
+                        logger.info("Client disconnected, stopping workflow")
+                        # TODO: You might want to add a method in workflow_service to handle early termination
+                        break
+                    yield {
+                        "event": event["event"],
+                        "data": json.dumps(event["data"], ensure_ascii=False),
+                    }
+            except asyncio.CancelledError:
+                logger.info("Stream processing cancelled")
+                raise
 
         return EventSourceResponse(
             event_generator(),
