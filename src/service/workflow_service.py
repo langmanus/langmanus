@@ -24,7 +24,7 @@ graph = build_graph()
 
 # Cache for coordinator messages
 coordinator_cache = []
-MAX_CACHE_SIZE = 5
+MAX_CACHE_SIZE = 2
 
 
 async def run_agent_workflow(
@@ -53,11 +53,6 @@ async def run_agent_workflow(
     workflow_id = str(uuid.uuid4())
 
     streaming_llm_agents = [*TEAM_MEMBERS, "planner", "coordinator"]
-
-    yield {
-        "event": "start_of_workflow",
-        "data": {"workflow_id": workflow_id, "input": user_input_messages},
-    }
 
     # Reset coordinator cache at the start of each workflow
     global coordinator_cache
@@ -94,6 +89,11 @@ async def run_agent_workflow(
         run_id = "" if (event.get("run_id") is None) else str(event["run_id"])
 
         if kind == "on_chain_start" and name in streaming_llm_agents:
+            if name == "planner":
+                yield {
+                    "event": "start_of_workflow",
+                    "data": {"workflow_id": workflow_id, "input": user_input_messages},
+                }
             ydata = {
                 "event": "start_of_agent",
                 "data": {
@@ -139,17 +139,13 @@ async def run_agent_workflow(
             else:
                 # Check if the message is from the coordinator
                 if node == "coordinator":
-                    # Cache coordinator messages
-                    if len(coordinator_cache) < MAX_CACHE_SIZE - 1:
-                        coordinator_cache.append(content)
-                        continue
-
-                    if len(coordinator_cache) == MAX_CACHE_SIZE - 1:
+                    if len(coordinator_cache) < MAX_CACHE_SIZE:
                         coordinator_cache.append(content)
                         cached_content = "".join(coordinator_cache)
-                        cached_content = cached_content.replace("```python", "")
                         if cached_content.startswith("handoff"):
                             is_handoff_case = True
+                            continue
+                        if len(coordinator_cache) < MAX_CACHE_SIZE:
                             continue
                         # Send the cached message
                         ydata = {
@@ -159,8 +155,7 @@ async def run_agent_workflow(
                                 "delta": {"content": cached_content},
                             },
                         }
-
-                    if not is_handoff_case:
+                    elif not is_handoff_case:
                         # For other agents, send the message directly
                         ydata = {
                             "event": "message",
@@ -200,13 +195,14 @@ async def run_agent_workflow(
             continue
         yield ydata
 
-    yield {
-        "event": "end_of_workflow",
-        "data": {
-            "workflow_id": workflow_id,
-            "messages": [
-                convert_message_to_dict(msg)
-                for msg in data["output"].get("messages", [])
-            ],
-        },
-    }
+    if is_handoff_case:
+        yield {
+            "event": "end_of_workflow",
+            "data": {
+                "workflow_id": workflow_id,
+                "messages": [
+                    convert_message_to_dict(msg)
+                    for msg in data["output"].get("messages", [])
+                ],
+            },
+        }
