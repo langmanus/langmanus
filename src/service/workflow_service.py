@@ -22,6 +22,10 @@ logger = logging.getLogger(__name__)
 # Create the graph
 graph = build_graph()
 
+# Cache for coordinator messages
+coordinator_cache = []
+MAX_CACHE_SIZE = 5
+
 
 async def run_agent_workflow(
     user_input_messages: list,
@@ -48,12 +52,18 @@ async def run_agent_workflow(
 
     workflow_id = str(uuid.uuid4())
 
-    streaming_llm_agents = [*TEAM_MEMBERS, "planner"]
+    streaming_llm_agents = [*TEAM_MEMBERS, "planner", "coordinator"]
 
     yield {
         "event": "start_of_workflow",
         "data": {"workflow_id": workflow_id, "input": user_input_messages},
     }
+
+    # Reset coordinator cache at the start of each workflow
+    global coordinator_cache
+    coordinator_cache = []
+    global is_handoff_case
+    is_handoff_case = False
 
     # TODO: extract message content from object, specifically for on_chat_model_stream
     async for event in graph.astream_events(
@@ -127,13 +137,47 @@ async def run_agent_workflow(
                     },
                 }
             else:
-                ydata = {
-                    "event": "message",
-                    "data": {
-                        "message_id": data["chunk"].id,
-                        "delta": {"content": content},
-                    },
-                }
+                # Check if the message is from the coordinator
+                if node == "coordinator":
+                    # Cache coordinator messages
+                    if len(coordinator_cache) < MAX_CACHE_SIZE - 1:
+                        coordinator_cache.append(content)
+                        continue
+
+                    if len(coordinator_cache) == MAX_CACHE_SIZE - 1:
+                        coordinator_cache.append(content)
+                        cached_content = "".join(coordinator_cache)
+                        cached_content = cached_content.replace("```python", "")
+                        if cached_content.startswith("handoff"):
+                            is_handoff_case = True
+                            continue
+                        # Send the cached message
+                        ydata = {
+                            "event": "message",
+                            "data": {
+                                "message_id": data["chunk"].id,
+                                "delta": {"content": cached_content},
+                            },
+                        }
+
+                    if not is_handoff_case:
+                        # For other agents, send the message directly
+                        ydata = {
+                            "event": "message",
+                            "data": {
+                                "message_id": data["chunk"].id,
+                                "delta": {"content": content},
+                            },
+                        }
+                else:
+                    # For other agents, send the message directly
+                    ydata = {
+                        "event": "message",
+                        "data": {
+                            "message_id": data["chunk"].id,
+                            "delta": {"content": content},
+                        },
+                    }
         elif kind == "on_tool_start" and node in TEAM_MEMBERS:
             ydata = {
                 "event": "tool_call",

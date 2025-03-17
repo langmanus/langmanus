@@ -96,7 +96,7 @@ def supervisor_node(state: State) -> Command[Literal[*TEAM_MEMBERS, "__end__"]]:
     return Command(goto=goto, update={"next": goto})
 
 
-def planner_node(state: State) -> Command[Literal["supervisor"]]:
+def planner_node(state: State) -> Command[Literal["supervisor", "__end__"]]:
     """Planner node that generate the full plan."""
     logger.info("Planner generating full plan")
     messages = apply_prompt_template("planner", state)
@@ -108,7 +108,7 @@ def planner_node(state: State) -> Command[Literal["supervisor"]]:
         searched_content = tavily_tool.invoke({"query": state["messages"][-1].content})
         messages.append(
             HumanMessage(
-                content=f"Here is the searched content: \n{json.dumps([{'titile': elem['title'], 'content': elem['content']} for elem in searched_content], ensure_ascii=False)}\nPlease use it to generate the full plan.",
+                content=f"# Relative Search Results\n\n{json.dumps([{'titile': elem['title'], 'content': elem['content']} for elem in searched_content], ensure_ascii=False)}",
                 name="planner",
             )
         )
@@ -119,12 +119,36 @@ def planner_node(state: State) -> Command[Literal["supervisor"]]:
     logger.debug(f"Current state messages: {state['messages']}")
     logger.debug(f"Planner response: {full_response}")
 
+    goto = "supervisor"
+    try:
+        json.loads(full_response)
+    except json.JSONDecodeError:
+        logger.warning("Planner response is not a valid JSON")
+        goto = "__end__"
+
     return Command(
         update={
             "messages": [HumanMessage(content=full_response, name="planner")],
             "full_plan": full_response,
         },
-        goto="supervisor",
+        goto=goto,
+    )
+
+
+def coordinator_node(state: State) -> Command[Literal["planner", "__end__"]]:
+    """Coordinator node that communicate with customers."""
+    logger.info("Coordinator talking.")
+    messages = apply_prompt_template("coordinator", state)
+    response = get_llm_by_type(AGENT_LLM_MAP["coordinator"]).invoke(messages)
+    logger.debug(f"Current state messages: {state['messages']}")
+    logger.debug(f"reporter response: {response}")
+
+    goto = "__end__"
+    if "handoff_to_planner" in response.content:
+        goto = "planner"
+
+    return Command(
+        goto=goto,
     )
 
 
