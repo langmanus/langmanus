@@ -56,12 +56,13 @@ LangManus implements a hierarchical multi-agent system where a supervisor coordi
 
 The system consists of the following agents working together:
 
-1. **Planner** - The entry point of the workflow that coordinates the overall execution
-2. **Supervisor** - Oversees and manages the execution of other agents
-3. **Researcher** - Gathers and analyzes information
-4. **Coder** - Handles code generation and modifications
-5. **Browser** - Performs web browsing and information retrieval
-6. **Reporter** - Generates reports and summaries of the workflow results
+1. **Coordinator** - The entry point that handles initial interactions and routes tasks
+2. **Planner** - Analyzes tasks and creates execution strategies
+3. **Supervisor** - Oversees and manages the execution of other agents
+4. **Researcher** - Gathers and analyzes information
+5. **Coder** - Handles code generation and modifications
+6. **Browser** - Performs web browsing and information retrieval
+7. **Reporter** - Generates reports and summaries of the workflow results
 
 ## Features
 
