@@ -23,7 +23,12 @@ logger = logging.getLogger(__name__)
 graph = build_graph()
 
 
-async def run_agent_workflow(user_input_messages: list, debug: bool = False):
+async def run_agent_workflow(
+    user_input_messages: list,
+    debug: bool = False,
+    deep_thinking_mode: bool = False,
+    search_before_planning: bool = False,
+):
     """Run the agent workflow with the given user input.
 
     Args:
@@ -43,7 +48,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
 
     workflow_id = str(uuid.uuid4())
 
-    streamed_agents = [*TEAM_MEMBERS, "planner"]
+    streaming_llm_agents = [*TEAM_MEMBERS, "planner"]
 
     yield {
         "event": "start_of_workflow",
@@ -57,6 +62,8 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
             "TEAM_MEMBERS": TEAM_MEMBERS,
             # Runtime Variables
             "messages": user_input_messages,
+            "deep_thinking_mode": deep_thinking_mode,
+            "search_before_planning": search_before_planning,
         },
         version="v2",
     ):
@@ -76,7 +83,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
         )
         run_id = "" if (event.get("run_id") is None) else str(event["run_id"])
 
-        if kind == "on_chain_start" and name in streamed_agents:
+        if kind == "on_chain_start" and name in streaming_llm_agents:
             ydata = {
                 "event": "start_of_agent",
                 "data": {
@@ -84,7 +91,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
                     "agent_id": f"{workflow_id}_{name}_{langgraph_step}",
                 },
             }
-        elif kind == "on_chain_end" and name in streamed_agents:
+        elif kind == "on_chain_end" and name in streaming_llm_agents:
             ydata = {
                 "event": "end_of_agent",
                 "data": {
@@ -92,17 +99,17 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
                     "agent_id": f"{workflow_id}_{name}_{langgraph_step}",
                 },
             }
-        elif kind == "on_chat_model_start" and node in streamed_agents:
+        elif kind == "on_chat_model_start" and node in streaming_llm_agents:
             ydata = {
                 "event": "start_of_llm",
                 "data": {"agent_name": node},
             }
-        elif kind == "on_chat_model_end" and node in streamed_agents:
+        elif kind == "on_chat_model_end" and node in streaming_llm_agents:
             ydata = {
                 "event": "end_of_llm",
                 "data": {"agent_name": node},
             }
-        elif kind == "on_chat_model_stream" and node in streamed_agents:
+        elif kind == "on_chat_model_stream" and node in streaming_llm_agents:
             content = data["chunk"].content
             if content is None or content == "":
                 if not data["chunk"].additional_kwargs.get("reasoning_content"):
@@ -127,7 +134,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
                         "delta": {"content": content},
                     },
                 }
-        elif kind == "on_tool_start":
+        elif kind == "on_tool_start" and node in TEAM_MEMBERS:
             ydata = {
                 "event": "tool_call",
                 "data": {
@@ -136,7 +143,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
                     "tool_input": data.get("input"),
                 },
             }
-        elif kind == "on_tool_end":
+        elif kind == "on_tool_end" and node in TEAM_MEMBERS:
             ydata = {
                 "event": "tool_call_result",
                 "data": {

@@ -61,6 +61,12 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     messages: List[ChatMessage] = Field(..., description="The conversation history")
     debug: Optional[bool] = Field(False, description="Whether to enable debug logging")
+    deep_thinking_mode: Optional[bool] = Field(
+        False, description="Whether to enable deep thinking mode"
+    )
+    search_before_planning: Optional[bool] = Field(
+        False, description="Whether to search before planning"
+    )
 
 
 @app.post("/api/chat/stream")
@@ -101,7 +107,12 @@ async def chat_endpoint(request: ChatRequest, req: Request):
 
         async def event_generator():
             try:
-                async for event in run_agent_workflow(messages, request.debug):
+                async for event in run_agent_workflow(
+                    messages,
+                    request.debug,
+                    request.deep_thinking_mode,
+                    request.search_before_planning,
+                ):
                     # Check if client is still connected
                     if await req.is_disconnected():
                         logger.info("Client disconnected, stopping workflow")

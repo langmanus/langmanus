@@ -1,4 +1,5 @@
 import logging
+import json
 from typing import Literal
 from langchain_core.messages import HumanMessage
 from langgraph.types import Command
@@ -9,6 +10,7 @@ from src.agents.llm import get_llm_by_type
 from src.config import TEAM_MEMBERS
 from src.config.agents import AGENT_LLM_MAP
 from src.prompts.template import apply_prompt_template
+from src.tools.search import tavily_tool
 from .types import State, Router
 
 logger = logging.getLogger(__name__)
@@ -23,7 +25,11 @@ def research_node(state: State) -> Command[Literal["supervisor"]]:
     return Command(
         update={
             "messages": [
-                HumanMessage(content=result["messages"][-1].content, name="researcher")
+                HumanMessage(
+                    content="Response from researcher:\n"
+                    + result["messages"][-1].content,
+                    name="researcher",
+                )
             ]
         },
         goto="supervisor",
@@ -39,7 +45,10 @@ def code_node(state: State) -> Command[Literal["supervisor"]]:
     return Command(
         update={
             "messages": [
-                HumanMessage(content=result["messages"][-1].content, name="coder")
+                HumanMessage(
+                    content="Response from coder:\n" + result["messages"][-1].content,
+                    name="coder",
+                )
             ]
         },
         goto="supervisor",
@@ -55,7 +64,10 @@ def browser_node(state: State) -> Command[Literal["supervisor"]]:
     return Command(
         update={
             "messages": [
-                HumanMessage(content=result["messages"][-1].content, name="browser")
+                HumanMessage(
+                    content="Response from browser:\n" + result["messages"][-1].content,
+                    name="browser",
+                )
             ]
         },
         goto="supervisor",
@@ -88,7 +100,18 @@ def planner_node(state: State) -> Command[Literal["supervisor"]]:
     """Planner node that generate the full plan."""
     logger.info("Planner generating full plan")
     messages = apply_prompt_template("planner", state)
-    llm = get_llm_by_type(AGENT_LLM_MAP["planner"])
+    # whether to enable deep thinking mode
+    llm = get_llm_by_type("basic")
+    if state.get("deep_thinking_mode"):
+        llm = get_llm_by_type("reasoning")
+    if state.get("search_before_planning"):
+        searched_content = tavily_tool.invoke({"query": state["messages"][-1].content})
+        messages.append(
+            HumanMessage(
+                content=f"Here is the searched content: \n{json.dumps([{'titile': elem['title'], 'content': elem['content']} for elem in searched_content], ensure_ascii=False)}\nPlease use it to generate the full plan.",
+                name="planner",
+            )
+        )
     stream = llm.stream(messages)
     full_response = ""
     for chunk in stream:
@@ -114,6 +137,13 @@ def reporter_node(state: State) -> Command[Literal["supervisor"]]:
     logger.debug(f"reporter response: {response}")
 
     return Command(
-        update={"messages": [HumanMessage(content=response.content, name="reporter")]},
+        update={
+            "messages": [
+                HumanMessage(
+                    content="Response from reporter:\n" + response.content,
+                    name="reporter",
+                )
+            ]
+        },
         goto="supervisor",
     )
