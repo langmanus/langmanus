@@ -892,6 +892,7 @@ dependencies = [
     { name = "fastapi" },
     { name = "httpx" },
     { name = "langchain-community" },
+    { name = "langchain-deepseek" },
     { name = "langchain-experimental" },
     { name = "langchain-openai" },
     { name = "langgraph" },
@@ -922,6 +923,7 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.110.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "langchain-community", specifier = ">=0.3.19" },
+    { name = "langchain-deepseek", specifier = ">=0.1.2" },
     { name = "langchain-experimental", specifier = ">=0.3.4" },
     { name = "langchain-openai", specifier = ">=0.3.8" },
     { name = "langgraph", specifier = ">=0.3.5" },
@@ -1025,6 +1027,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8e/18/26255368f56d2749709fc2884c521d64471f32118ce09dfc677e0596be20/langchain_core-0.3.43.tar.gz", hash = "sha256:bec60f4f5665b536434ff747b8f23375a812e82cfa529f519b54cc1e7a94a875", size = 529403 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/20/0e/ddf9f5dc46b178df5c101666bb3bc7fc526d68cd81cdd60cbe1b6b438b30/langchain_core-0.3.43-py3-none-any.whl", hash = "sha256:caa6bc1f4c6ab71d3c2e400f8b62e1cd6dc5ac2c37e03f12f3e2c60befd5b273", size = 415421 },
+]
+
+[[package]]
+name = "langchain-deepseek"
+version = "0.1.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "langchain-core" },
+    { name = "langchain-openai" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/76/50/53c67820df28cd15b53eb4bd6b8e212bf74ea50448637bd9c057897884db/langchain_deepseek-0.1.2.tar.gz", hash = "sha256:0ccb482d1241ed16a5578dcb7606b847d923b7dd56737e7e5ba20be635d0ca34", size = 5437 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/43/94/8a7b5629a784e40024ae9e352c656f63a8c94184f4477b60a6c2a42bac7d/langchain_deepseek-0.1.2-py3-none-any.whl", hash = "sha256:6ec76c621670afa763671eba8a54ff356b1772f3779fea4ea963cf01e5119145", size = 5627 },
 ]
 
 [[package]]

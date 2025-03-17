@@ -54,6 +54,17 @@
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"
             }
+        },
+        {
+            "name": "Python: llm.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/agents/llm.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
         }
     ]
 }

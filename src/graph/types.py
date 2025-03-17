@@ -22,3 +22,4 @@ class State(MessagesState):
 
     # Runtime Variables
     next: str
+    full_plan: str

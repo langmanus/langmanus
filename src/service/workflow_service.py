@@ -43,7 +43,7 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
 
     workflow_id = str(uuid.uuid4())
 
-    streamed_agents = [*TEAM_MEMBERS, "reporter"]
+    streamed_agents = [*TEAM_MEMBERS, "planner"]
 
     yield {
         "event": "start_of_workflow",
@@ -105,11 +105,28 @@ async def run_agent_workflow(user_input_messages: list, debug: bool = False):
         elif kind == "on_chat_model_stream" and node in streamed_agents:
             content = data["chunk"].content
             if content is None or content == "":
-                continue
-            ydata = {
-                "event": "message",
-                "data": {"message_id": data["chunk"].id, "delta": {"content": content}},
-            }
+                if not data["chunk"].additional_kwargs.get("reasoning_content"):
+                    # Skip empty messages
+                    continue
+                ydata = {
+                    "event": "message",
+                    "data": {
+                        "message_id": data["chunk"].id,
+                        "delta": {
+                            "reasoning_content": (
+                                data["chunk"].additional_kwargs["reasoning_content"]
+                            )
+                        },
+                    },
+                }
+            else:
+                ydata = {
+                    "event": "message",
+                    "data": {
+                        "message_id": data["chunk"].id,
+                        "delta": {"content": content},
+                    },
+                }
         elif kind == "on_tool_start":
             ydata = {
                 "event": "tool_call",

@@ -25,6 +25,7 @@ dependencies = [
     "pandas>=2.2.3",
     "numpy>=2.2.3",
     "yfinance>=0.2.54",
+    "langchain-deepseek>=0.1.2",
 ]
 
 [project.optional-dependencies]
