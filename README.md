@@ -52,14 +52,16 @@ uv run main.py
 
 LangManus implements a hierarchical multi-agent system where a supervisor coordinates specialized agents to accomplish complex tasks:
 
-![LangManus Architecture](./assets/architecture.jpeg)
+![LangManus Architecture](./assets/architecture.png)
 
-The system consists of:
-- **Supervisor**: Orchestrates the workflow and delegates tasks
-- **Researcher**: Handles web searches and information gathering
-- **Coder**: Manages code generation and modification
-- **File Manager**: Handles file system operations
-- **Browser**: Performs web crawling and interaction
+The system consists of the following agents working together:
+
+1. **Planner** - The entry point of the workflow that coordinates the overall execution
+2. **Supervisor** - Oversees and manages the execution of other agents
+3. **Researcher** - Gathers and analyzes information
+4. **Coder** - Handles code generation and modifications
+5. **Browser** - Performs web browsing and information retrieval
+6. **Reporter** - Generates reports and summaries of the workflow results
 
 ## Features
 

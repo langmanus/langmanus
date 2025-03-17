@@ -48,3 +48,7 @@ def run_agent_workflow(user_input: str, debug: bool = False):
     logger.debug(f"Final workflow state: {result}")
     logger.info("Workflow completed successfully")
     return result
+
+
+if __name__ == "__main__":
+    print(graph.get_graph().draw_mermaid())

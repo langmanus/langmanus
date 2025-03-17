@@ -53,14 +53,16 @@ uv run main.py
 
 LangManus 实现了一个分层的多智能体系统，其中有一个主管智能体协调专门的智能体来完成复杂任务：
 
-![LangManus 架构](./assets/architecture.jpeg)
+![LangManus 架构](./assets/architecture.png)
 
-系统包含以下组件：
-- **主管（Supervisor）**：编排工作流程并分配任务
-- **研究员（Researcher）**：处理网络搜索和信息收集
-- **程序员（Coder）**：管理代码生成和修改
-- **文件管理员（File Manager）**：处理文件系统操作
-- **浏览器（Browser）**：执行网络爬取和交互
+系统由以下智能体协同工作：
+
+1. **规划员（Planner）**：工作流程的入口点，负责协调整体执行
+2. **主管（Supervisor）**：监督和管理其他智能体的执行
+3. **研究员（Researcher）**：收集和分析信息
+4. **程序员（Coder）**：负责代码生成和修改
+5. **浏览器（Browser）**：执行网页浏览和信息检索
+6. **汇报员（Reporter）**：生成工作流结果的报告和总结
 
 ## 功能特性
 
@@ -123,8 +125,6 @@ source .venv/bin/activate
 # 步骤 2：安装项目依赖
 uv sync
 ```
-
-完成这些步骤后，您的环境就正确配置好并准备就绪了。
 
 ### 配置
 
