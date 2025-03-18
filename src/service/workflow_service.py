@@ -24,7 +24,7 @@ graph = build_graph()
 
 # Cache for coordinator messages
 coordinator_cache = []
-MAX_CACHE_SIZE = 2
+MAX_CACHE_SIZE = 3
 
 
 async def run_agent_workflow(

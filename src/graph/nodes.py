@@ -88,7 +88,7 @@ def supervisor_node(state: State) -> Command[Literal[*TEAM_MEMBERS, "__end__"]]:
     messages = apply_prompt_template("supervisor", state)
     response = (
         get_llm_by_type(AGENT_LLM_MAP["supervisor"])
-        .with_structured_output(Router)
+        .with_structured_output(schema=Router, method="json_mode")
         .invoke(messages)
     )
     goto = response["next"]
@@ -153,7 +153,7 @@ def coordinator_node(state: State) -> Command[Literal["planner", "__end__"]]:
     messages = apply_prompt_template("coordinator", state)
     response = get_llm_by_type(AGENT_LLM_MAP["coordinator"]).invoke(messages)
     logger.debug(f"Current state messages: {state['messages']}")
-    logger.debug(f"reporter response: {response}")
+    logger.debug(f"Coordinator response: {response}")
 
     goto = "__end__"
     if "handoff_to_planner" in response.content:

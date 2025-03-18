@@ -65,12 +65,13 @@ def create_deepseek_llm(
 
     return ChatDeepSeek(**llm_kwargs)
 
+
 def create_azure_llm(
     azure_deployment: str,
     azure_endpoint: str,
     api_version: str,
     api_key: str,
-    temperature: float = 0.0
+    temperature: float = 0.0,
 ) -> AzureChatOpenAI:
     """
     create azure llm instance with specified configuration
@@ -80,8 +81,9 @@ def create_azure_llm(
         azure_endpoint=azure_endpoint,
         api_version=api_version,
         api_key=api_key,
-        temperature=temperature
+        temperature=temperature,
     )
+
 
 # Cache for LLM instances
 _llm_cache: dict[LLMType, ChatOpenAI | ChatDeepSeek] = {}
