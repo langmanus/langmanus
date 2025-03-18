@@ -117,7 +117,7 @@ def planner_node(state: State) -> Command[Literal["supervisor", "__end__"]]:
         messages = deepcopy(messages)
         messages[
             -1
-        ].content += f"\n\n# Relative Search Results\n\n{json.dumps([{'titile': elem['title'], 'content': elem['content']} for elem in searched_content], ensure_ascii=False)}"
+        ].content += f"\n\n# Relative Search Results\n\n{json.dumps([{'title': elem['title'], 'content': elem['content']} for elem in searched_content], ensure_ascii=False)}"
     stream = llm.stream(messages)
     full_response = ""
     for chunk in stream:
