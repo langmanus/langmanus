@@ -1,4 +1,4 @@
-.PHONY: lint format install-dev serve
+.PHONY: lint format install-dev serve test coverage
 
 install-dev:
 	pip install -e ".[dev]"
@@ -11,3 +11,9 @@ lint:
 
 serve:
 	uv run server.py
+
+test:
+	pytest tests/
+
+coverage:
+	pytest --cov=src tests/ --cov-report=term-missing

@@ -164,6 +164,23 @@ JINA_API_KEY=your_jina_api_key  # Optional
 CHROME_INSTANCE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome  # Optional, path to Chrome executable
 ```
 
+In addition to supporting LLMs compatible with OpenAI, LangManus also supports Azure LLMs. The configuration method is as follows:
+```ini
+# AZURE LLM Config
+AZURE_API_BASE=https://xxxx
+AZURE_API_KEY=xxxxx
+AZURE_API_VERSION=2023-07-01-preview
+
+# Reasoning LLM (for complex reasoning tasks)
+REASONING_AZURE_DEPLOYMENT=xxx
+
+# Non-reasoning LLM (for straightforward tasks)
+BASIC_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
+
+# Vision-language LLM (for tasks requiring visual understanding)
+VL_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
+```
+
 > **Note:**
 >
 > - The system uses different models for different types of tasks:

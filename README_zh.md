@@ -169,6 +169,23 @@ JINA_API_KEY=your_jina_api_key  # 可选
 CHROME_INSTANCE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome  # 可选，Chrome 可执行文件路径
 ```
 
+除了openai兼容LLM，LangManus也支持Azure LLM，配置方式如下：
+```ini
+# AZURE LLM Config
+AZURE_API_BASE=https://xxxx
+AZURE_API_KEY=xxxxx
+AZURE_API_VERSION=2023-07-01-preview
+
+# Reasoning LLM (for complex reasoning tasks)
+REASONING_AZURE_DEPLOYMENT=xxx
+
+# Non-reasoning LLM (for straightforward tasks)
+BASIC_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
+
+# Vision-language LLM (for tasks requiring visual understanding)
+VL_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
+```
+
 > **注意：**
 >
 > - 系统对不同类型的任务使用不同的模型：
