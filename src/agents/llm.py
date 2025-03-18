@@ -1,5 +1,6 @@
 from langchain_openai import ChatOpenAI, AzureChatOpenAI
 from langchain_deepseek import ChatDeepSeek
+from langchain_community.chat_models import ChatLiteLLM
 from typing import Optional
 
 from src.config import (
@@ -85,17 +86,46 @@ def create_azure_llm(
     )
 
 
+def create_litellm_model(
+    model: str,
+    base_url: Optional[str] = None,
+    api_key: Optional[str] = None,
+    temperature: float = 0.0,
+    **kwargs,
+) -> ChatLiteLLM:
+    """
+    Support various different model's through LiteLLM's capabilities.
+    """
+
+    llm_kwargs = {"model": model, "temperature": temperature, **kwargs}
+
+    if base_url:  # This will handle None or empty string
+        llm_kwargs["api_base"] = base_url
+
+    if api_key:  # This will handle None or empty string
+        llm_kwargs["api_key"] = api_key
+
+    return ChatLiteLLM(**llm_kwargs)
+
+
 # Cache for LLM instances
-_llm_cache: dict[LLMType, ChatOpenAI | ChatDeepSeek] = {}
+_llm_cache: dict[LLMType, ChatOpenAI | ChatDeepSeek | AzureChatOpenAI | ChatLiteLLM] = (
+    {}
+)
 
 
-def get_llm_by_type(llm_type: LLMType) -> ChatOpenAI | ChatDeepSeek | AzureChatOpenAI:
+def get_llm_by_type(
+    llm_type: LLMType,
+) -> ChatOpenAI | ChatDeepSeek | AzureChatOpenAI | ChatLiteLLM:
     """
     Get LLM instance by type. Returns cached instance if available.
     """
     if llm_type in _llm_cache:
         return _llm_cache[llm_type]
 
+    # TODO: A pretty ugly patch. Since that LiteLLM always uses `provider/model` to represent a model,
+    #       we assume that if the model name contains a `/`, it's a LiteLLM model.
+    #       Open AI and DeepSeek don't naming their models like this, so we can safely assume that it's safe.
     if llm_type == "reasoning":
         if REASONING_AZURE_DEPLOYMENT:
             llm = create_azure_llm(
@@ -103,6 +133,12 @@ def get_llm_by_type(llm_type: LLMType) -> ChatOpenAI | ChatDeepSeek | AzureChatO
                 azure_endpoint=AZURE_API_BASE,
                 api_version=AZURE_API_VERSION,
                 api_key=AZURE_API_KEY,
+            )
+        elif "/" in BASIC_MODEL:
+            llm = create_litellm_model(
+                model=REASONING_MODEL,
+                base_url=REASONING_BASE_URL,
+                api_key=REASONING_API_KEY,
             )
         else:
             llm = create_deepseek_llm(
@@ -118,6 +154,12 @@ def get_llm_by_type(llm_type: LLMType) -> ChatOpenAI | ChatDeepSeek | AzureChatO
                 api_version=AZURE_API_VERSION,
                 api_key=AZURE_API_KEY,
             )
+        elif "/" in BASIC_MODEL:
+            llm = create_litellm_model(
+                model=BASIC_MODEL,
+                base_url=BASIC_BASE_URL,
+                api_key=BASIC_API_KEY,
+            )
         else:
             llm = create_openai_llm(
                 model=BASIC_MODEL,
@@ -131,6 +173,12 @@ def get_llm_by_type(llm_type: LLMType) -> ChatOpenAI | ChatDeepSeek | AzureChatO
                 azure_endpoint=AZURE_API_BASE,
                 api_version=AZURE_API_VERSION,
                 api_key=AZURE_API_KEY,
+            )
+        elif "/" in VL_MODEL:
+            llm = create_litellm_model(
+                model=VL_MODEL,
+                base_url=VL_BASE_URL,
+                api_key=VL_API_KEY,
             )
         else:
             llm = create_openai_llm(
@@ -158,5 +206,5 @@ if __name__ == "__main__":
         full_response += chunk.content
     print(full_response)
 
-    basic_llm.invoke("Hello")
-    vl_llm.invoke("Hello")
+    print(basic_llm.invoke("Hello"))
+    print(vl_llm.invoke("Hello"))

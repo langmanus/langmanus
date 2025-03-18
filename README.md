@@ -43,14 +43,10 @@ LangManus is a community-driven AI automation framework that builds upon the inc
 git clone https://github.com/langmanus/langmanus.git
 cd langmanus
 
-# Create and activate virtual environment through uv
-uv python install 3.12
-uv venv --python 3.12
+# Install dependencies, uv will take care of the python interpreter and venv creation
+uv sync
 
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-uv sync
 
 # Configure environment
 cp .env.example .env
@@ -187,7 +183,7 @@ VL_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
 >     - Reasoning LLM for complex decision-making and analysis
 >     - Basic LLM for simpler text-based tasks
 >     - Vision-Language LLM for tasks involving image understanding
-> - You can customize the base URLs for all LLMs independently
+> - You can customize the base URLs for all LLMs independently, and you can use LiteLLM's board LLM support by following [this guide](https://docs.litellm.ai/docs/providers).
 > - Each LLM can use different API keys if needed
 > - Jina API key is optional. Provide your own key to access a higher rate limit (get your API key at [jina.ai](https://jina.ai/))
 > - Tavily search is configured to return a maximum of 5 results by default (get your API key at [app.tavily.com](https://app.tavily.com/))

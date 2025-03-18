@@ -26,6 +26,7 @@ dependencies = [
     "numpy>=2.2.3",
     "yfinance>=0.2.54",
     "langchain-deepseek>=0.1.2",
+    "litellm>=1.63.11",
 ]
 
 [project.optional-dependencies]
