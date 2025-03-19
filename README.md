@@ -53,6 +53,7 @@ uv sync
 uv run playwright install
 
 # Configure environment
+# Windows: copy .env.example .env 
 cp .env.example .env
 # Edit .env with your API keys
 
