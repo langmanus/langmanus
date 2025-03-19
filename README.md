@@ -47,6 +47,9 @@ cd langmanus
 # Install dependencies, uv will take care of the python interpreter and venv creation
 uv sync
 
+# Playwright install to use Chromium for browser-use by default
+uv run playwright install
+
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Configure environment
@@ -123,7 +126,8 @@ The system consists of the following agents working together:
 We believe in the power of open source collaboration. This project wouldn't be possible without the amazing work of projects like:
 - [Qwen](https://github.com/QwenLM/Qwen) for their open source LLMs
 - [Tavily](https://tavily.com/) for search capabilities
-- [Jina](https://jina.ai/) for neural search technology
+- [Jina](https://jina.ai/) for crawl search technology
+- [Browser-use](https://pypi.org/project/browser-use/) for control browser
 - And many other open source contributors
 
 We're committed to giving back to the community and welcome contributions of all kinds - whether it's code, documentation, bug reports, or feature suggestions.

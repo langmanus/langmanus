@@ -24,6 +24,7 @@ LangManus 是一个社区驱动的 AI 自动化框架，它建立在开源社区
 
 ## 目录
 - [快速开始](#快速开始)
+- [项目声明](#项目声明)
 - [架构](#架构)
 - [功能特性](#功能特性)
 - [为什么选择 LangManus？](#为什么选择-langmanus)
@@ -46,14 +47,11 @@ LangManus 是一个社区驱动的 AI 自动化框架，它建立在开源社区
 git clone https://github.com/langmanus/langmanus.git
 cd langmanus
 
-# 用uv创建并激活虚拟环境
-uv python install 3.12
-uv venv --python 3.12
-
-source .venv/bin/activate  # Windows系统使用: .venv\Scripts\activate
-
 # 安装依赖
 uv sync
+
+# Playwright install to use Chromium for browser-use by default
+uv run playwright install
 
 # 配置环境
 cp .env.example .env
@@ -62,6 +60,16 @@ cp .env.example .env
 # 运行项目
 uv run main.py
 ```
+
+## 项目声明
+
+本项目是一个学术驱动的开源项目，由一群前同事在业余时间开发，旨在探索和交流 Multi-Agent 和 DeepResearch 相关领域的技术。
+- **项目目的**：本项目的主要目的是学术研究、参与 GAIA 排行榜，并计划在未来发表相关论文。
+- **独立性声明**：本项目完全独立，与我们的本职工作无关，不代表我们所在公司或任何组织的立场或观点。
+- **无关联声明**：本项目与 Manus（无论是公司、组织还是其他实体）无任何关联。
+- **澄清声明**：我们未在任何社交媒体平台上宣传过本项目，任何与本项目相关的不实报道均与本项目的学术精神无关。
+- **贡献管理**：Issue 和 PR 将在我们空闲时间处理，可能存在延迟，敬请谅解。
+- **免责声明**：本项目基于 MIT 协议开源，使用者需自行承担使用风险。我们对因使用本项目产生的任何直接或间接后果不承担责任。
 
 ## 架构
 
@@ -110,7 +118,8 @@ LangManus 实现了一个分层的多智能体系统，其中有一个主管智�
 我们信奉开源协作的力量。本项目的实现离不开以下优秀项目的支持：
 - [Qwen](https://github.com/QwenLM/Qwen)：提供开源语言模型
 - [Tavily](https://tavily.com/)：提供搜索能力
-- [Jina](https://jina.ai/)：提供神经搜索技术
+- [Jina](https://jina.ai/)：提供网络爬虫技术
+- [Browser-use](https://pypi.org/project/browser-use/)：提供浏览器控制能力
 - 以及众多其他开源贡献者
 
 我们致力于回馈社区，欢迎各种形式的贡献——无论是代码、文档、问题报告还是功能建议。
