@@ -23,9 +23,8 @@ There are many ways you can contribute to LangManus:
    ```
 3. Set up your development environment:
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    uv sync
+   uv run playwright install
    ```
 4. Configure pre-commit hooks:
    ```bash

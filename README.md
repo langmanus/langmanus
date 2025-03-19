@@ -52,8 +52,6 @@ uv sync
 # Playwright install to use Chromium for browser-use by default
 uv run playwright install
 
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
 # Configure environment
 cp .env.example .env
 # Edit .env with your API keys

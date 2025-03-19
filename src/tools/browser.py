@@ -7,8 +7,13 @@ from browser_use import AgentHistoryList, Browser, BrowserConfig
 from browser_use import Agent as BrowserAgent
 from src.agents.llm import vl_llm
 from src.tools.decorators import create_logged_tool
-from src.config import CHROME_INSTANCE_PATH, CHROME_HEADLESS, CHROME_PROXY_SERVER, CHROME_PROXY_USERNAME, CHROME_PROXY_PASSWORD
-
+from src.config import (
+    CHROME_INSTANCE_PATH,
+    CHROME_HEADLESS,
+    CHROME_PROXY_SERVER,
+    CHROME_PROXY_USERNAME,
+    CHROME_PROXY_PASSWORD,
+)
 
 browser_config = BrowserConfig(
     headless=CHROME_HEADLESS,
@@ -25,6 +30,7 @@ if CHROME_PROXY_SERVER:
     browser_config.proxy = proxy_config
 
 expected_browser = Browser(config=browser_config)
+
 
 class BrowserUseInput(BaseModel):
     """Input for WriteFileTool."""

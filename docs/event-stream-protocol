@@ -151,10 +151,27 @@ data: {
 }
 ```
 
-### End of Workflow
+### End of Report
 ```yaml
 event: end_of_report
 data: {
     "report_id": "1234567890_report"
+}
+```
+
+### Final Session State
+```yaml
+event: final_session_state
+data: {
+    "messages": [
+        {
+            "role": "user",
+            "content": "what is MCP?"
+        },
+        {
+            "role": "user",
+            "content": "MCP is..."
+        }
+    ]
 }
 ```

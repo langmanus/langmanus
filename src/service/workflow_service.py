@@ -196,6 +196,7 @@ async def run_agent_workflow(
         yield ydata
 
     if is_handoff_case:
+        # TODO: remove messages attributes after Frontend being compatible with final_session_state event.
         yield {
             "event": "end_of_workflow",
             "data": {
@@ -206,3 +207,12 @@ async def run_agent_workflow(
                 ],
             },
         }
+    yield {
+        "event": "final_session_state",
+        "data": {
+            "messages": [
+                convert_message_to_dict(msg)
+                for msg in data["output"].get("messages", [])
+            ],
+        },
+    }
