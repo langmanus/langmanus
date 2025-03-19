@@ -23,16 +23,18 @@ LangManus 是一个社区驱动的 AI 自动化框架，它建立在开源社区
 - [下载视频](https://github.com/langmanus/langmanus/blob/main/assets/demo.mp4)
 
 ## 目录
+
 - [快速开始](#快速开始)
 - [项目声明](#项目声明)
 - [架构](#架构)
 - [功能特性](#功能特性)
 - [为什么选择 LangManus？](#为什么选择-langmanus)
 - [安装设置](#安装设置)
-    - [前置要求](#前置要求)
-    - [安装步骤](#安装步骤)
-    - [配置](#配置)
+  - [前置要求](#前置要求)
+  - [安装步骤](#安装步骤)
+  - [配置](#配置)
 - [使用方法](#使用方法)
+- [Docker](#docker)
 - [网页界面](#网页界面)
 - [开发](#开发)
 - [贡献](#贡献)
@@ -64,6 +66,7 @@ uv run main.py
 ## 项目声明
 
 本项目是一个学术驱动的开源项目，由一群前同事在业余时间开发，旨在探索和交流 Multi-Agent 和 DeepResearch 相关领域的技术。
+
 - **项目目的**：本项目的主要目的是学术研究、参与 GAIA 排行榜，并计划在未来发表相关论文。
 - **独立性声明**：本项目完全独立，与我们的本职工作无关，不代表我们所在公司或任何组织的立场或观点。
 - **无关联声明**：本项目与 Manus（无论是公司、组织还是其他实体）无任何关联。
@@ -90,32 +93,37 @@ LangManus 实现了一个分层的多智能体系统，其中有一个主管智�
 ## 功能特性
 
 ### 核心能力
+
 - 🤖 **LLM 集成**
-    - 支持通义千问等开源模型
-    - OpenAI 兼容的 API 接口
-    - 多层 LLM 系统适配不同任务复杂度
+  - 支持通义千问等开源模型
+  - OpenAI 兼容的 API 接口
+  - 多层 LLM 系统适配不同任务复杂度
 
 ### 工具和集成
+
 - 🔍 **搜索和检索**
-    - 通过 Tavily API 进行网络搜索
-    - 使用 Jina 进行神经搜索
-    - 高级内容提取
+  - 通过 Tavily API 进行网络搜索
+  - 使用 Jina 进行神经搜索
+  - 高级内容提取
 
 ### 开发特性
+
 - 🐍 **Python 集成**
-    - 内置 Python REPL
-    - 代码执行环境
-    - 使用 uv 进行包管理
+  - 内置 Python REPL
+  - 代码执行环境
+  - 使用 uv 进行包管理
 
 ### 工作流管理
+
 - 📊 **可视化和控制**
-    - 工作流程图可视化
-    - 多智能体编排
-    - 任务分配和监控
+  - 工作流程图可视化
+  - 多智能体编排
+  - 任务分配和监控
 
 ## 为什么选择 LangManus？
 
 我们信奉开源协作的力量。本项目的实现离不开以下优秀项目的支持：
+
 - [Qwen](https://github.com/QwenLM/Qwen)：提供开源语言模型
 - [Tavily](https://tavily.com/)：提供搜索能力
 - [Jina](https://jina.ai/)：提供网络爬虫技术
@@ -176,9 +184,14 @@ JINA_API_KEY=your_jina_api_key  # 可选
 
 # 浏览器配置
 CHROME_INSTANCE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome  # 可选，Chrome 可执行文件路径
+CHROME_HEADLESS=False  # 可选，默认是 False
+CHROME_PROXY_SERVER=http://127.0.0.1:10809  # 可选，默认是 None
+CHROME_PROXY_USERNAME=  # 可选，默认是 None
+CHROME_PROXY_PASSWORD=  # 可选，默认是 None
 ```
 
-除了openai兼容LLM，LangManus也支持Azure LLM，配置方式如下：
+除了 openai 兼容 LLM，LangManus 也支持 Azure LLM，配置方式如下：
+
 ```ini
 # AZURE LLM Config
 AZURE_API_BASE=https://xxxx
@@ -198,9 +211,9 @@ VL_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
 > **注意：**
 >
 > - 系统对不同类型的任务使用不同的模型：
->     - 推理 LLM 用于复杂的决策和分析
->     - 基础 LLM 用于简单的文本任务
->     - 视觉语言 LLM 用于涉及图像理解的任务
+>   - 推理 LLM 用于复杂的决策和分析
+>   - 基础 LLM 用于简单的文本任务
+>   - 视觉语言 LLM 用于涉及图像理解的任务
 > - 所有 LLM 的基础 URL 都可以独立自定义
 > - 每个 LLM 可以使用不同的 API 密钥
 > - Jina API 密钥是可选的，提供自己的密钥可以获得更高的速率限制（你可以在 [jina.ai](https://jina.ai/) 获该密钥）
@@ -213,19 +226,23 @@ cp .env.example .env
 ```
 
 ### 配置预提交钩子
+
 LangManus 包含一个预提交钩子，在每次提交前运行代码检查和格式化。设置步骤：
 
 1. 使预提交脚本可执行：
+
 ```bash
 chmod +x pre-commit
 ```
 
 2. 安装预提交钩子：
+
 ```bash
 ln -s ../../pre-commit .git/hooks/pre-commit
 ```
 
 预提交钩子将自动：
+
 - 运行代码检查（`make lint`）
 - 运行代码格式化（`make format`）
 - 将任何重新格式化的文件添加回暂存区
@@ -256,20 +273,19 @@ uv run server.py
 API 服务器提供以下端点：
 
 - `POST /api/chat/stream`：用于 LangGraph 调用的聊天端点，流式响应
-    - 请求体：
-    ```json
-    {
-      "messages": [
-        {"role": "user", "content": "在此输入您的查询"}
-      ],
-      "debug": false
-    }
-    ```
-    - 返回包含智能体响应的服务器发送事件（SSE）流
+  - 请求体：
+  ```json
+  {
+    "messages": [{ "role": "user", "content": "在此输入您的查询" }],
+    "debug": false
+  }
+  ```
+  - 返回包含智能体响应的服务器发送事件（SSE）流
 
 ### 高级配置
 
 LangManus 可以通过 `src/config` 目录中的各种配置文件进行自定义：
+
 - `env.py`：配置 LLM 模型、API 密钥和基础 URL
 - `tools.py`：调整工具特定设置（如 Tavily 搜索结果限制）
 - `agents.py`：修改团队组成和智能体系统提示
@@ -285,25 +301,43 @@ LangManus 在 `src/prompts` 目录中使用复杂的提示系统来定义智能�
 - **研究员（[`src/prompts/researcher.md`](src/prompts/researcher.md)）**：专门通过网络搜索和数据收集来收集信息。使用 Tavily 搜索和网络爬取功能，避免数学计算或文件操作。
 
 - **程序员（[`src/prompts/coder.md`](src/prompts/coder.md)）**：专业软件工程师角色，专注于 Python 和 bash 脚本。处理：
-    - Python 代码执行和分析
-    - Shell 命令执行
-    - 技术问题解决和实现
+
+  - Python 代码执行和分析
+  - Shell 命令执行
+  - 技术问题解决和实现
 
 - **文件管理员（[`src/prompts/file_manager.md`](src/prompts/file_manager.md)）**：处理所有文件系统操作，重点是正确格式化和保存 markdown 格式的内容。
 
 - **浏览器（[`src/prompts/browser.md`](src/prompts/browser.md)）**：网络交互专家，处理：
-    - 网站导航
-    - 页面交互（点击、输入、滚动）
-    - 从网页提取内容
+  - 网站导航
+  - 页面交互（点击、输入、滚动）
+  - 从网页提取内容
 
 #### 提示系统架构
 
 提示系统使用模板引擎（[`src/prompts/template.py`](src/prompts/template.py)）来：
+
 - 加载特定角色的 markdown 模板
 - 处理变量替换（如当前时间、团队成员信息）
 - 为每个智能体格式化系统提示
 
 每个智能体的提示都在单独的 markdown 文件中定义，这样无需更改底层代码就可以轻松修改行为和职责。
+
+## Docker
+
+LangManus 可以运行在 Docker 容器中。默认情况下，API 服务器在端口 8000 上运行。
+
+```bash
+docker build -t langmanus .
+docker run --name langmanus -d --env-file .env -e CHROME_HEADLESS=True -p 8000:8000 langmanus
+```
+
+你也可以直接用 Docker 运行 CLI：
+
+```bash
+docker build -t langmanus .
+docker run --rm -it --env-file .env -e CHROME_HEADLESS=True langmanus uv run python main.py
+```
 
 ## 网页界面
 
