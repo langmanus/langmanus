@@ -5,7 +5,7 @@ from typing import Optional, ClassVar, Type
 from langchain.tools import BaseTool
 from browser_use import AgentHistoryList, Browser, BrowserConfig
 from browser_use import Agent as BrowserAgent
-from src.agents.llm import vl_llm
+from src.llms.llm import vl_llm
 from src.tools.decorators import create_logged_tool
 from src.config import (
     CHROME_INSTANCE_PATH,

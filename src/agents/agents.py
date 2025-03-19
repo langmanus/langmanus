@@ -9,7 +9,7 @@ from src.tools import (
     tavily_tool,
 )
 
-from .llm import get_llm_by_type
+from src.llms.llm import get_llm_by_type
 from src.config.agents import AGENT_LLM_MAP
 
 # Create agents using configured LLM types

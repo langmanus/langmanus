@@ -2,12 +2,12 @@ import logging
 import json
 from copy import deepcopy
 from typing import Literal
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, BaseMessage
 from langgraph.types import Command
 from langgraph.graph import END
 
 from src.agents import research_agent, coder_agent, browser_agent
-from src.agents.llm import get_llm_by_type
+from src.llms.llm import get_llm_by_type
 from src.config import TEAM_MEMBERS
 from src.config.agents import AGENT_LLM_MAP
 from src.prompts.template import apply_prompt_template
@@ -29,9 +29,7 @@ def research_node(state: State) -> Command[Literal["supervisor"]]:
         update={
             "messages": [
                 HumanMessage(
-                    content=RESPONSE_FORMAT.format(
-                        "researcher", result["messages"][-1].content
-                    ),
+                    content=result["messages"][-1].content,
                     name="researcher",
                 )
             ]
@@ -50,9 +48,7 @@ def code_node(state: State) -> Command[Literal["supervisor"]]:
         update={
             "messages": [
                 HumanMessage(
-                    content=RESPONSE_FORMAT.format(
-                        "coder", result["messages"][-1].content
-                    ),
+                    content=result["messages"][-1].content,
                     name="coder",
                 )
             ]
@@ -71,9 +67,7 @@ def browser_node(state: State) -> Command[Literal["supervisor"]]:
         update={
             "messages": [
                 HumanMessage(
-                    content=RESPONSE_FORMAT.format(
-                        "browser", result["messages"][-1].content
-                    ),
+                    content=result["messages"][-1].content,
                     name="browser",
                 )
             ]
@@ -86,6 +80,11 @@ def supervisor_node(state: State) -> Command[Literal[*TEAM_MEMBERS, "__end__"]]:
     """Supervisor node that decides which agent should act next."""
     logger.info("Supervisor evaluating next action")
     messages = apply_prompt_template("supervisor", state)
+    # preprocess messages to make supervisor execute better.
+    messages = deepcopy(messages)
+    for message in messages:
+        if isinstance(message, BaseMessage) and message.name in TEAM_MEMBERS:
+            message.content = RESPONSE_FORMAT.format(message.name, message.content)
     response = (
         get_llm_by_type(AGENT_LLM_MAP["supervisor"])
         .with_structured_output(schema=Router, method="json_mode")
@@ -176,7 +175,7 @@ def reporter_node(state: State) -> Command[Literal["supervisor"]]:
         update={
             "messages": [
                 HumanMessage(
-                    content=RESPONSE_FORMAT.format("reporter", response.content),
+                    content=response.content,
                     name="reporter",
                 )
             ]

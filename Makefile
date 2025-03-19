@@ -1,7 +1,7 @@
 .PHONY: lint format install-dev serve test coverage
 
 install-dev:
-	uv pip install -e ".[dev]"
+	uv pip install -e ".[dev]" && uv pip install -e ".[test]"
 
 format:
 	black --preview .
