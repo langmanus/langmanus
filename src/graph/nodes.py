@@ -127,10 +127,13 @@ def planner_node(state: State) -> Command[Literal["supervisor", "__end__"]]:
         llm = get_llm_by_type("reasoning")
     if state.get("search_before_planning"):
         searched_content = tavily_tool.invoke({"query": state["messages"][-1].content})
-        messages = deepcopy(messages)
-        messages[
-            -1
-        ].content += f"\n\n# Relative Search Results\n\n{json.dumps([{'title': elem['title'], 'content': elem['content']} for elem in searched_content], ensure_ascii=False)}"
+        if isinstance(searched_content, list):
+            messages = deepcopy(messages)
+            messages[
+                -1
+            ].content += f"\n\n# Relative Search Results\n\n{json.dumps([{'title': elem['title'], 'content': elem['content']} for elem in searched_content], ensure_ascii=False)}"
+        else:
+            logger.error(f"Tavily search returned malformed response: {searched_content}")
     stream = llm.stream(messages)
     full_response = ""
     for chunk in stream:
