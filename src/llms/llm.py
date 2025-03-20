@@ -1,6 +1,6 @@
 from langchain_openai import ChatOpenAI, AzureChatOpenAI
 from langchain_deepseek import ChatDeepSeek
-from langchain_community.chat_models import ChatLiteLLM
+from src.llms.litellm_v2 import ChatLiteLLMV2 as ChatLiteLLM
 from typing import Optional
 
 from src.config import (
@@ -134,7 +134,7 @@ def get_llm_by_type(
                 api_version=AZURE_API_VERSION,
                 api_key=AZURE_API_KEY,
             )
-        elif "/" in BASIC_MODEL:
+        elif "/" in REASONING_MODEL:
             llm = create_litellm_model(
                 model=REASONING_MODEL,
                 base_url=REASONING_BASE_URL,
@@ -200,11 +200,11 @@ vl_llm = get_llm_by_type("vision")
 
 
 if __name__ == "__main__":
-    stream = reasoning_llm.stream("what is mcp?")
-    full_response = ""
-    for chunk in stream:
-        full_response += chunk.content
-    print(full_response)
+    # stream = reasoning_llm.stream("what is mcp?")
+    # full_response = ""
+    # for chunk in stream:
+    #     full_response += chunk.content
+    # print(full_response)
 
     print(basic_llm.invoke("Hello"))
-    print(vl_llm.invoke("Hello"))
+    # print(vl_llm.invoke("Hello"))

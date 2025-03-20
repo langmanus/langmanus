@@ -59,7 +59,7 @@
             "name": "Python: llm.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/src/agents/llm.py",
+            "program": "${workspaceFolder}/src/llms/llm.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "env": {
