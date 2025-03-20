@@ -224,7 +224,7 @@ VL_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
 > - You can customize the base URLs for all LLMs independently, and you can use LiteLLM's board LLM support by following [this guide](https://docs.litellm.ai/docs/providers).
 > - Each LLM can use different API keys if needed
 > - Jina API key is optional. Provide your own key to access a higher rate limit (get your API key at [jina.ai](https://jina.ai/))
-> - Tavily search is configured to return a maximum of 5 results by default (get your API key at [app.tavily.com](https://app.tavily.com/))
+> - Tavily API key is **required**. Tavily search is configured to return a maximum of 5 results by default (get your API key at [app.tavily.com](https://app.tavily.com/))
 
 You can copy the `.env.example` file as a template to get started:
 
