@@ -43,7 +43,7 @@ interface Step {
 interface Plan {
   thought: string;
   title: string;
-  steps: Plan[];
+  steps: Step[];
 }
 ```
 
