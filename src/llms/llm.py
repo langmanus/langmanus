@@ -2,6 +2,7 @@ from langchain_openai import ChatOpenAI, AzureChatOpenAI
 from langchain_deepseek import ChatDeepSeek
 from src.llms.litellm_v2 import ChatLiteLLMV2 as ChatLiteLLM
 from typing import Optional
+from litellm import LlmProviders
 
 from src.config import (
     REASONING_MODEL,
@@ -114,6 +115,23 @@ _llm_cache: dict[LLMType, ChatOpenAI | ChatDeepSeek | AzureChatOpenAI | ChatLite
 )
 
 
+def is_litellm_model(model_name: str) -> bool:
+    """
+    Check if the model name indicates it should be handled by LiteLLM.
+
+    Args:
+        model_name: The name of the model to check
+
+    Returns:
+        bool: True if the model should be handled by LiteLLM, False otherwise
+    """
+    return (
+        model_name
+        and "/" in model_name
+        and model_name.split("/")[0] in [p.value for p in LlmProviders]
+    )
+
+
 def get_llm_by_type(
     llm_type: LLMType,
 ) -> ChatOpenAI | ChatDeepSeek | AzureChatOpenAI | ChatLiteLLM:
@@ -123,9 +141,6 @@ def get_llm_by_type(
     if llm_type in _llm_cache:
         return _llm_cache[llm_type]
 
-    # TODO: A pretty ugly patch. Since that LiteLLM always uses `provider/model` to represent a model,
-    #       we assume that if the model name contains a `/`, it's a LiteLLM model.
-    #       Open AI and DeepSeek don't naming their models like this, so we can safely assume that it's safe.
     if llm_type == "reasoning":
         if REASONING_AZURE_DEPLOYMENT:
             llm = create_azure_llm(
@@ -134,7 +149,7 @@ def get_llm_by_type(
                 api_version=AZURE_API_VERSION,
                 api_key=AZURE_API_KEY,
             )
-        elif "/" in REASONING_MODEL:
+        elif is_litellm_model(REASONING_MODEL):
             llm = create_litellm_model(
                 model=REASONING_MODEL,
                 base_url=REASONING_BASE_URL,
@@ -154,7 +169,7 @@ def get_llm_by_type(
                 api_version=AZURE_API_VERSION,
                 api_key=AZURE_API_KEY,
             )
-        elif "/" in BASIC_MODEL:
+        elif is_litellm_model(BASIC_MODEL):
             llm = create_litellm_model(
                 model=BASIC_MODEL,
                 base_url=BASIC_BASE_URL,
@@ -174,7 +189,7 @@ def get_llm_by_type(
                 api_version=AZURE_API_VERSION,
                 api_key=AZURE_API_KEY,
             )
-        elif "/" in VL_MODEL:
+        elif is_litellm_model(VL_MODEL):
             llm = create_litellm_model(
                 model=VL_MODEL,
                 base_url=VL_BASE_URL,
