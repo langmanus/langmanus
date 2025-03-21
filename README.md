@@ -5,7 +5,7 @@
 [![WeChat](https://img.shields.io/badge/WeChat-Langmanus-brightgreen?logo=wechat&logoColor=white)](./assets/wechat_community.jpg)
 [![Discord Follow](https://dcbadge.vercel.app/api/server/m3MszDcn?style=flat)](https://discord.gg/m3MszDcn)
 
-[English](./README.md) | [简体中文](./README_zh.md)
+[English](./README.md) | [简体中文](./README_zh.md) | [日本語](./README_ja.md)
 
 > Come From Open Source, Back to Open Source
 
