@@ -41,8 +41,6 @@ _DictOrPydantic = Union[Dict, _BM]
 def _is_pydantic_class(obj: Any) -> bool:
     return isinstance(obj, type) and is_basemodel_subclass(obj)
 
-import litellm
-# litellm._turn_on_debug()
 
 class ChatLiteLLMV2(ChatLiteLLM):
     def with_structured_output(
