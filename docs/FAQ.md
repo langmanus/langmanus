@@ -40,6 +40,23 @@ BASIC_BASE_URL=http://localhost:11434
 BASIC_MODEL=ollama_chat/qwen2.5:0.5b
 ```
 
+### How to use OpenRouter models in LangManus?
+
+LangManus supports integration with OpenRouter models. To use an OpenRouter model, you need to:
+1. Obtain your OPENROUTER_API_KEY from OpenRouter (https://openrouter.ai/)
+2. Prefix the model name with `openrouter/`
+3. Configure the correct base URL for OpenRouter
+
+Here's an example of the environment configuration for using OpenRouter models:
+
+```
+BASIC_API_KEY=OPENROUTER_API_KEY
+BASIC_BASE_URL=https://openrouter.ai/api/v1
+BASIC_MODEL=openrouter/anthropic/claude-3-opus
+```
+
+Note: Available models and their exact names may change over time. Please verify the current model offerings and their correct identifiers at [OpenRouter's website](https://openrouter.ai/docs).
+
 ### How to use Google Gemini models in LangManus?
 
 LangManus supports integration with Google's Gemini models. To use a Gemini model, follow these steps:

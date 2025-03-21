@@ -1,4 +1,4 @@
-# LangManus
+# 🦜🤖 LangManus
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -381,10 +381,17 @@ make format
 
 このプロジェクトはオープンソースであり、[MITライセンス](LICENSE)の下で利用可能です。
 
+## 謝辞
+
+LangManusを可能にするすべてのオープンソースプロジェクトと貢献者に特別な感謝を捧げます。私たちは巨人の肩の上に立っています。
+
+特に以下のプロジェクトに深い感謝を表します：
+- [LangChain](https://github.com/langchain-ai/langchain)：私たちのLLM相互作用とチェーンを支える優れたフレームワーク
+- [LangGraph](https://github.com/langchain-ai/langgraph)：洗練されたマルチエージェントオーケストレーションを実現
+- [Browser-use](https://pypi.org/project/browser-use/)：ブラウザ制御を提供
+
+これらの素晴らしいプロジェクトはLangManusの基盤を形成し、オープンソースコラボレーションの力を示しています。
+
 ## スター履歴
 
 [![Star History Chart](https://api.star-history.com/svg?repos=langmanus/langmanus&type=Date)](https://www.star-history.com/#langmanus/langmanus&Date)
-
-## 謝辞
-
-LangManusを可能にするすべてのオープンソースプロジェクトと貢献者に特別な感謝を捧げます。私たちは巨人の肩に立っています。

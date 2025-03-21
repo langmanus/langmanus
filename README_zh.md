@@ -1,4 +1,4 @@
-# LangManus
+# 🦜🤖 LangManus
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -413,3 +413,10 @@ make format
 ## 致谢
 
 特别感谢所有让 LangManus 成为可能的开源项目和贡献者。我们站在巨人的肩膀上。
+
+我们特别要感谢以下项目：
+- [LangChain](https://github.com/langchain-ai/langchain)：为我们提供了出色的框架，支撑着我们的 LLM 交互和链式操作
+- [LangGraph](https://github.com/langchain-ai/langgraph)：为我们的复杂多智能体编排提供支持
+- [Browser-use](https://pypi.org/project/browser-use/)：提供浏览器控制能力
+
+这些优秀的项目构成了 LangManus 的基石，展现了开源协作的力量。

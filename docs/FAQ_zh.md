@@ -42,6 +42,23 @@ BASIC_BASE_URL=http://localhost:11434
 BASIC_MODEL=ollama_chat/qwen2.5:0.5b
 ```
 
+### 如何使用 OpenRouter 模型？
+
+LangManus 支持集成 OpenRouter 模型。要使用 OpenRouter 模型，你需要：
+1. 从 OpenRouter 获取 OPENROUTER_API_KEY (https://openrouter.ai/)
+2. 在模型名称前添加 `openrouter/` 前缀
+3. 配置正确的 OpenRouter 基础 URL
+
+以下是使用 OpenRouter 模型的环境配置示例：
+
+```
+BASIC_API_KEY=OPENROUTER_API_KEY
+BASIC_BASE_URL=https://openrouter.ai/api/v1
+BASIC_MODEL=openrouter/anthropic/claude-3-opus
+```
+
+注意：可用模型及其确切名称可能随时间变化。请在 [OpenRouter 的官方文档](https://openrouter.ai/docs) 上验证当前可用的模型及其正确标识符。
+
 ### 如何使用 Google Gemini 模型？
 
 LangManus 支持集成 Google 的 Gemini 模型。要使用 Gemini 模型，请按照以下步骤操作：

@@ -1,4 +1,4 @@
-# LangManus
+# 🦜🤖 LangManus
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -11,7 +11,7 @@
 
 LangManus is a community-driven AI automation framework that builds upon the incredible work of the open source community. Our goal is to combine language models with specialized tools for tasks like web search, crawling, and Python code execution, while giving back to the community that made this possible.
 
-## Demo Video
+## Demo
 
 **Task**: Calculate the influence index of DeepSeek R1 on HuggingFace. This index can be designed using a weighted sum of factors such as followers, downloads, and likes.
 
@@ -407,3 +407,10 @@ This project is open source and available under the [MIT License](LICENSE).
 ## Acknowledgments
 
 Special thanks to all the open source projects and contributors that make LangManus possible. We stand on the shoulders of giants.
+
+In particular, we want to express our deep appreciation for:
+- [LangChain](https://github.com/langchain-ai/langchain) for their exceptional framework that powers our LLM interactions and chains
+- [LangGraph](https://github.com/langchain-ai/langgraph) for enabling our sophisticated multi-agent orchestration
+- [Browser-use](https://pypi.org/project/browser-use/) for control browser
+
+These amazing projects form the foundation of LangManus and demonstrate the power of open source collaboration.
