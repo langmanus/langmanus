@@ -126,6 +126,9 @@ async def chat_endpoint(request: ChatRequest, req: Request):
             except asyncio.CancelledError:
                 logger.info("Stream processing cancelled")
                 raise
+            except Exception as e:
+                logger.error(f"Error in workflow: {e}")
+                raise
 
         return EventSourceResponse(
             event_generator(),

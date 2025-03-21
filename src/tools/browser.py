@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import json
 from pydantic import BaseModel, Field
 from typing import Optional, ClassVar, Type
@@ -16,6 +17,9 @@ from src.config import (
     BROWSER_HISTORY_DIR,
 )
 import uuid
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 browser_config = BrowserConfig(
     headless=CHROME_HEADLESS,
@@ -88,6 +92,15 @@ class BrowserTool(BaseTool):
         except Exception as e:
             return f"Error executing browser task: {str(e)}"
 
+    async def terminate(self):
+        """Terminate the browser agent if it exists."""
+        if self._agent and self._agent.browser:
+            try:
+                await self._agent.browser.close()
+            except Exception as e:
+                logger.error(f"Error terminating browser agent: {str(e)}")
+        self._agent = None
+
     async def _arun(self, instruction: str) -> str:
         """Run the browser task asynchronously."""
         generated_gif_path = f"{BROWSER_HISTORY_DIR}/{uuid.uuid4()}.gif"
@@ -111,6 +124,8 @@ class BrowserTool(BaseTool):
                 )
         except Exception as e:
             return f"Error executing browser task: {str(e)}"
+        finally:
+            await self.terminate()
 
 
 BrowserTool = create_logged_tool(BrowserTool)
