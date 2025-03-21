@@ -41,6 +41,8 @@ _DictOrPydantic = Union[Dict, _BM]
 def _is_pydantic_class(obj: Any) -> bool:
     return isinstance(obj, type) and is_basemodel_subclass(obj)
 
+import litellm
+# litellm._turn_on_debug()
 
 class ChatLiteLLMV2(ChatLiteLLM):
     def with_structured_output(
@@ -68,7 +70,7 @@ class ChatLiteLLMV2(ChatLiteLLM):
                 )
             tool_name = convert_to_openai_tool(schema)["function"]["name"]
             bind_kwargs = self._filter_disabled_params(
-                tool_choice=tool_name,
+                tool_choice='auto',
                 parallel_tool_calls=False,
                 strict=strict,
                 ls_structured_output_format={
@@ -76,7 +78,7 @@ class ChatLiteLLMV2(ChatLiteLLM):
                     "schema": schema,
                 },
             )
-
+            print(f"bind_kwargs: {bind_kwargs}")
             llm = self.bind_tools([schema], **bind_kwargs)
             if is_pydantic_schema:
                 output_parser: Runnable = PydanticToolsParser(
@@ -117,3 +119,50 @@ class ChatLiteLLMV2(ChatLiteLLM):
             return RunnableMap(raw=llm) | parser_with_fallback
         else:
             return llm | output_parser
+
+    def _filter_disabled_params(self, **kwargs: Any) -> Dict[str, Any]:
+        """
+        Filter parameters that are not supported by the underlying model.
+
+        Args:
+            **kwargs: Parameters to be filtered.
+
+        Returns:
+            Dict[str, Any]: Dictionary containing only the supported parameters.
+        """
+        # Get the parameters supported by the underlying model
+        supported_params = self.llm_kwargs()
+
+        # Filter parameters, keeping only the supported ones
+        filtered_kwargs = {}
+
+        for key, value in kwargs.items():
+            # Check if the underlying model supports this parameter
+            if key in supported_params or key.startswith("ls_"):
+                filtered_kwargs[key] = value
+
+        return filtered_kwargs
+
+    def llm_kwargs(self) -> Dict[str, Any]:
+        """
+        Returns a dictionary with the parameters supported by the underlying LLM model.
+
+        Returns:
+            Dict[str, Any]: Dictionary containing the parameters supported by the model.
+        """
+        # Common parameters supported by Groq models
+        supported_params = {
+            "model",
+            "temperature",
+            "top_p",
+            "n",
+            "stream",
+            "stop",
+            "max_tokens",
+            "user",
+            "tool_choice",
+            "tools",
+            "tool-use",
+            "response_format",
+        }
+        return supported_params
