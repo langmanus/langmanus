@@ -15,7 +15,7 @@ LangManus is a community-driven AI automation framework that builds upon the inc
 
 > **Task**: Calculate the influence index of DeepSeek R1 on HuggingFace. This index can be designed by considering a weighted sum of factors such as followers, downloads, and likes.
 
-[![Demo](./assets/demo.gif)](./assets/demo.mp4)
+![Demo](./assets/demo.gif)
 
 - [View on YouTube](https://youtu.be/sZCHqrQBUGk)
 - [Download Video](https://github.com/langmanus/langmanus/blob/main/assets/demo.mp4)

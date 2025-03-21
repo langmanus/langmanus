@@ -17,7 +17,7 @@ LangManus 是一个社区驱动的 AI 自动化框架，它建立在开源社区
 >
 > **任务**：计算 DeepSeek R1 在 HuggingFace 上的影响力指数。该指数可以通过考虑粉丝、下载量和点赞数等权重因素来设计。
 
-[![Demo](./assets/demo.gif)](./assets/demo.mp4)
+![Demo](./assets/demo.gif)
 
 - [在 YouTube 上观看](https://youtu.be/sZCHqrQBUGk)
 - [下载视频](https://github.com/langmanus/langmanus/blob/main/assets/demo.mp4)

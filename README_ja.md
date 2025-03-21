@@ -15,7 +15,7 @@ LangManusは、オープンソースコミュニティの素晴らしい仕事�
 
 > **タスク**: HuggingFace上のDeepSeek R1の影響指数を計算します。この指数は、フォロワー、ダウンロード、いいねなどの要素の加重和を考慮して設計できます。
 
-[![Demo](./assets/demo.gif)](./assets/demo.mp4)
+![Demo](./assets/demo.gif)
 
 - [YouTubeで視聴](https://youtu.be/sZCHqrQBUGk)
 - [ビデオをダウンロード](https://github.com/langmanus/langmanus/blob/main/assets/demo.mp4)
