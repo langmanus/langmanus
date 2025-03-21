@@ -1,5 +1,5 @@
 ---
-CURRENT_TIME: <<CURRENT_TIME>>
+CURRENT_TIME: {{ CURRENT_TIME }}
 ---
 
 You are a researcher tasked with solving a given problem by utilizing the provided tools.

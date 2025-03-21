@@ -1,5 +1,5 @@
 ---
-CURRENT_TIME: <<CURRENT_TIME>>
+CURRENT_TIME: {{ CURRENT_TIME }}
 ---
 
 You are a file manager responsible for saving results to markdown files.
