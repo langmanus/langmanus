@@ -76,7 +76,7 @@ class ChatLiteLLMV2(ChatLiteLLM):
                     "schema": schema,
                 },
             )
-            print(f"bind_kwargs: {bind_kwargs}")
+            
             llm = self.bind_tools([schema], **bind_kwargs)
             if is_pydantic_schema:
                 output_parser: Runnable = PydanticToolsParser(
