@@ -1,19 +1,71 @@
+import langchain_community.chat_models.litellm as litellm
+from typing import Any, Dict, Literal, Optional, Type, TypeVar, Union, Mapping
+from langchain_core.messages import (
+    AIMessageChunk,
+    BaseMessageChunk,
+    ChatMessageChunk,
+    FunctionMessageChunk,
+    HumanMessageChunk,
+    SystemMessageChunk,
+    ToolCallChunk,
+)
+
+
+def _convert_delta_to_message_chunk(
+    _dict: Mapping[str, Any], default_class: Type[BaseMessageChunk]
+) -> BaseMessageChunk:
+    role = _dict.get("role")
+    content = _dict.get("content") or ""
+    if _dict.get("function_call"):
+        additional_kwargs = {"function_call": dict(_dict["function_call"])}
+    elif _dict.get("reasoning_content"):
+        # support output reasoning_content
+        additional_kwargs = {"reasoning_content": _dict["reasoning_content"]}
+    else:
+        additional_kwargs = {}
+
+    tool_call_chunks = []
+    if raw_tool_calls := _dict.get("tool_calls"):
+        additional_kwargs["tool_calls"] = raw_tool_calls
+        try:
+            tool_call_chunks = [
+                ToolCallChunk(
+                    name=rtc["function"].get("name"),
+                    args=rtc["function"].get("arguments"),
+                    id=rtc.get("id"),
+                    index=rtc["index"],
+                )
+                for rtc in raw_tool_calls
+            ]
+        except KeyError:
+            pass
+
+    if role == "user" or default_class == HumanMessageChunk:
+        return HumanMessageChunk(content=content)
+    elif role == "assistant" or default_class == AIMessageChunk:
+        return AIMessageChunk(
+            content=content,
+            additional_kwargs=additional_kwargs,
+            tool_call_chunks=tool_call_chunks,
+        )
+    elif role == "system" or default_class == SystemMessageChunk:
+        return SystemMessageChunk(content=content)
+    elif role == "function" or default_class == FunctionMessageChunk:
+        return FunctionMessageChunk(content=content, name=_dict["name"])
+    elif role or default_class == ChatMessageChunk:
+        return ChatMessageChunk(content=content, role=role)  # type: ignore[arg-type]
+    else:
+        return default_class(content=content)  # type: ignore[call-arg]
+
+
+# monkey patch: support output reasoning_content
+litellm._convert_delta_to_message_chunk = _convert_delta_to_message_chunk
+
 from langchain_community.chat_models import ChatLiteLLM
 
 from operator import itemgetter
-from typing import (
-    Any,
-    Dict,
-    Literal,
-    Optional,
-    Type,
-    TypeVar,
-    Union,
-    cast,
-)
 
 from langchain_core.language_models import LanguageModelInput
-
 
 from langchain_core.output_parsers import JsonOutputParser, PydanticOutputParser
 from langchain_core.output_parsers.openai_tools import (

@@ -1,8 +1,12 @@
+from google.protobuf.any import is_type
 from langchain_openai import ChatOpenAI, AzureChatOpenAI
 from langchain_deepseek import ChatDeepSeek
 from src.llms.litellm_v2 import ChatLiteLLMV2 as ChatLiteLLM
+from src.config import load_yaml_config
 from typing import Optional
 from litellm import LlmProviders
+from pathlib import Path
+from typing import Dict, Any
 
 from src.config import (
     REASONING_MODEL,
@@ -132,15 +136,9 @@ def is_litellm_model(model_name: str) -> bool:
     )
 
 
-def get_llm_by_type(
+def _create_llm_use_env(
     llm_type: LLMType,
 ) -> ChatOpenAI | ChatDeepSeek | AzureChatOpenAI | ChatLiteLLM:
-    """
-    Get LLM instance by type. Returns cached instance if available.
-    """
-    if llm_type in _llm_cache:
-        return _llm_cache[llm_type]
-
     if llm_type == "reasoning":
         if REASONING_AZURE_DEPLOYMENT:
             llm = create_azure_llm(
@@ -163,6 +161,7 @@ def get_llm_by_type(
             )
     elif llm_type == "basic":
         if BASIC_AZURE_DEPLOYMENT:
+            print("===== use azure ====")
             llm = create_azure_llm(
                 azure_deployment=BASIC_AZURE_DEPLOYMENT,
                 azure_endpoint=AZURE_API_BASE,
@@ -203,6 +202,40 @@ def get_llm_by_type(
             )
     else:
         raise ValueError(f"Unknown LLM type: {llm_type}")
+    return llm
+
+
+def _create_llm_use_conf(llm_type: LLMType, conf: Dict[str, Any]) -> ChatLiteLLM:
+    llm_type_map = {
+        "reasoning": conf.get("REASONING_MODEL"),
+        "basic": conf.get("BASIC_MODEL"),
+        "vision": conf.get("VISION_MODEL"),
+    }
+    llm_conf = llm_type_map.get(llm_type)
+    if not llm_conf:
+        raise ValueError(f"Unknown LLM type: {llm_type}")
+    if not isinstance(llm_conf, dict):
+        raise ValueError(f"Invalid LLM Conf: {llm_type}")
+    return ChatLiteLLM(**llm_conf)
+
+
+def get_llm_by_type(
+    llm_type: LLMType,
+) -> ChatOpenAI | ChatDeepSeek | AzureChatOpenAI | ChatLiteLLM:
+    """
+    Get LLM instance by type. Returns cached instance if available.
+    """
+    if llm_type in _llm_cache:
+        return _llm_cache[llm_type]
+
+    conf = load_yaml_config(
+        str((Path(__file__).parent.parent.parent / "conf.yaml").resolve())
+    )
+    use_conf = conf.get("USE_CONF", False)
+    if use_conf:
+        llm = _create_llm_use_conf(llm_type, conf)
+    else:
+        llm = _create_llm_use_env(llm_type)
 
     _llm_cache[llm_type] = llm
     return llm

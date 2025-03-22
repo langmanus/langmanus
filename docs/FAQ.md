@@ -23,59 +23,71 @@ In LangManus, we categorize models into three types:
 - **Supported Models**: `gpt-4o`, `qwen2.5-vl-72b-instruct`, `gemini-2.0-flash`.
 
 ### How to switch models?
-
-You can switch models by modifying the `.env` file in the project root directory. For specific configuration methods, please refer to [README.md](https://github.com/langmanus/langmanus/blob/main/README.md).
-
-### How to use Ollama models in LangManus?
-
-LangManus supports integration with Ollama models. To use an Ollama model, you need to:
-1. Prefix the model name with `ollama_chat/`
-2. Configure the correct base URL for your Ollama server
-
-Here's an example of the environment configuration for using Ollama models:
-
-```
-BASIC_API_KEY=
-BASIC_BASE_URL=http://localhost:11434
-BASIC_MODEL=ollama_chat/qwen2.5:0.5b
-```
-
-### How to use OpenRouter models in LangManus?
-
-LangManus supports integration with OpenRouter models. To use an OpenRouter model, you need to:
-1. Obtain your OPENROUTER_API_KEY from OpenRouter (https://openrouter.ai/)
-2. Prefix the model name with `openrouter/`
-3. Configure the correct base URL for OpenRouter
-
-Here's an example of the environment configuration for using OpenRouter models:
-
-```
-BASIC_API_KEY=OPENROUTER_API_KEY
-BASIC_BASE_URL=https://openrouter.ai/api/v1
-BASIC_MODEL=openrouter/anthropic/claude-3-opus
-```
-
-Note: Available models and their exact names may change over time. Please verify the current model offerings and their correct identifiers at [OpenRouter's website](https://openrouter.ai/docs).
-
-### How to use Google Gemini models in LangManus?
-
-LangManus supports integration with Google's Gemini models. To use a Gemini model, follow these steps:
-
-1. Obtain your Gemini API key from Google AI Studio (https://makersuite.google.com/app/apikey)
-2. Configure your environment variables as follows:
-
-```
-BASIC_API_KEY=YOUR_GEMINI_KEY
-BASIC_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
-BASIC_MODEL=gemini-2.0-flash
-```
-
-Note:
-- Replace `YOUR_GEMINI_KEY` with your actual Gemini API key
-- The base URL is specifically configured to use Gemini through LangManus's OpenAI-compatible interface
-- Available models include `gemini-2.0-flash` for chat and vision tasks
+You can switch the model in use by modifying the `conf.yaml` file in the root directory of the project, using the configuration in the litellm format. For the specific configuration method, please refer to [README.md](https://github.com/langmanus/langmanus/blob/main/README.md).
 
 ---
+
+### How to use Ollama models?
+
+LangManus supports the integration of Ollama models. You can refer to [litellm Ollama](https://docs.litellm.ai/docs/providers/ollama). <br>
+The following is a configuration example of `conf.yaml` for using Ollama models:
+
+```yaml
+REASONING_MODEL:
+  model: "ollama/ollama-model-name"
+  api_base: "http://localhost:11434" # Local service address of Ollama, which can be started/viewed via ollama serve
+```
+
+### How to use OpenRouter models?
+
+LangManus supports the integration of OpenRouter models. You can refer to [litellm OpenRouter](https://docs.litellm.ai/docs/providers/openrouter). To use OpenRouter models, you need to:
+1. Obtain the OPENROUTER_API_KEY from OpenRouter (https://openrouter.ai/) and set it in the environment variable.
+2. Add the `openrouter/` prefix before the model name.
+3. Configure the correct OpenRouter base URL.
+
+The following is a configuration example for using OpenRouter models:
+1. Configure OPENROUTER_API_KEY in the environment variable (such as the `.env` file)
+```ini
+OPENROUTER_API_KEY=""
+```
+2. Configure the model in `conf.yaml`
+```yaml
+REASONING_MODEL:
+  model: "openrouter/google/palm-2-chat-bison"
+```
+
+Note: The available models and their exact names may change over time. Please verify the currently available models and their correct identifiers in [OpenRouter's official documentation](https://openrouter.ai/docs).
+
+### How to use Google Gemini models?
+
+LangManus supports the integration of Google's Gemini models. You can refer to [litellm Gemini](https://docs.litellm.ai/docs/providers/gemini). To use Gemini models, please follow these steps:
+
+1. Obtain the Gemini API key from Google AI Studio (https://makersuite.google.com/app/apikey).
+2. Configure the Gemini API key in the environment variable (such as the `.env` file)
+```ini
+GEMINI_API_KEY="Your Gemini API key"
+```
+3. Configure the model in `conf.yaml`
+```yaml
+REASONING_MODEL:
+  model: "gemini/gemini-pro"
+```
+
+Notes:
+- Replace `YOUR_GEMINI_KEY` with your actual Gemini API key.
+- The base URL is specifically configured to use Gemini through LangManus' OpenAI-compatible interface.
+- The available models include `gemini-2.0-flash` for chat and visual tasks.
+
+### How to use Azure models?
+
+LangManus supports the integration of Azure models. You can refer to [litellm Azure](https://docs.litellm.ai/docs/providers/azure). Configuration example of `conf.yaml`:
+```yaml
+REASONING_MODEL:
+  model: "azure/gpt-4o-2024-08-06"
+  api_base: $AZURE_API_BASE
+  api_version: $AZURE_API_VERSION
+  api_key: $AZURE_API_KEY
+``` 
 
 ## How to deploy the Web UI frontend project?
 

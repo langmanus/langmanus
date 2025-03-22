@@ -13,7 +13,7 @@ serve:
 	uv run server.py
 
 test:
-	pytest tests/
+	uv run pytest tests/
 
 coverage:
-	pytest --cov=src tests/ --cov-report=term-missing
+	uv run pytest --cov=src tests/ --cov-report=term-missing

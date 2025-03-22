@@ -24,58 +24,71 @@
 
 ### 如何切换模型？
 
-您可以通过修改项目根目录下的 `.env` 文件来切换所使用的模型。具体配置方法请参考 [README.md](https://github.com/langmanus/langmanus/blob/main/README.md)。
+您可以通过修改项目根目录下的 `conf.yaml` 文件使用litellm格式的配置来切换所使用的模型。具体配置方法请参考 [README.md](https://github.com/langmanus/langmanus/blob/main/README.md)。
 
 ---
 
 ### 如何使用 Ollama 模型？
 
-LangManus 支持集成 Ollama 模型。要使用 Ollama 模型，你需要：
-1. 在模型名称前添加 `ollama_chat/` 前缀
-2. 配置正确的 Ollama 服务器基础 URL
+LangManus 支持集成 Ollama 模型。您可以参考[litellm Ollama](https://docs.litellm.ai/docs/providers/ollama)。<br>
+以下是使用 Ollama 模型的conf.yaml配置示例：
 
-以下是使用 Ollama 模型的环境配置示例：
-
-```
-BASIC_API_KEY=
-BASIC_BASE_URL=http://localhost:11434
-BASIC_MODEL=ollama_chat/qwen2.5:0.5b
+```yaml
+REASONING_MODEL:
+  model: "ollama/ollama-model-name"
+  api_base: "http://localhost:11434" # ollama本地服务地址, 可以通过ollama serve启动/查看地址
 ```
 
 ### 如何使用 OpenRouter 模型？
 
-LangManus 支持集成 OpenRouter 模型。要使用 OpenRouter 模型，你需要：
-1. 从 OpenRouter 获取 OPENROUTER_API_KEY (https://openrouter.ai/)
+LangManus 支持集成 OpenRouter 模型。你可以参考[litellm OpenRouter](https://docs.litellm.ai/docs/providers/openrouter)，要使用OpenRouter模型，您需要:
+1. 从 OpenRouter 获取 OPENROUTER_API_KEY (https://openrouter.ai/) 并设置到环境变量中
 2. 在模型名称前添加 `openrouter/` 前缀
 3. 配置正确的 OpenRouter 基础 URL
 
-以下是使用 OpenRouter 模型的环境配置示例：
-
+以下是使用 OpenRouter 模型的配置示例：
+1. 在环境变量（比如.env文件）中配置OPENROUTER_API_KEY
+```ini
+OPENROUTER_API_KEY=""
 ```
-BASIC_API_KEY=OPENROUTER_API_KEY
-BASIC_BASE_URL=https://openrouter.ai/api/v1
-BASIC_MODEL=openrouter/anthropic/claude-3-opus
+2. 在conf.yaml中配置模型
+```yaml
+REASONING_MODEL:
+  model: "openrouter/google/palm-2-chat-bison"
 ```
 
 注意：可用模型及其确切名称可能随时间变化。请在 [OpenRouter 的官方文档](https://openrouter.ai/docs) 上验证当前可用的模型及其正确标识符。
 
 ### 如何使用 Google Gemini 模型？
 
-LangManus 支持集成 Google 的 Gemini 模型。要使用 Gemini 模型，请按照以下步骤操作：
+LangManus 支持集成 Google 的 Gemini 模型。您可以参考[litellm Gemini](https://docs.litellm.ai/docs/providers/gemini)，要使用 Gemini 模型，请按照以下步骤操作：
 
 1. 从 Google AI Studio 获取 Gemini API 密钥 (https://makersuite.google.com/app/apikey)
-2. 按如下方式配置环境变量：
-
+2. 在环境变量（比如.env文件）中配置Gemini API 密钥
+```ini
+GEMINI_API_KEY="您的Gemini API密钥"
 ```
-BASIC_API_KEY=YOUR_GEMINI_KEY
-BASIC_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
-BASIC_MODEL=gemini-2.0-flash
+3. 在conf.yaml中配置模型
+```yaml
+REASONING_MODEL:
+  model: "gemini/gemini-pro"
 ```
 
 注意事项：
 - 将 `YOUR_GEMINI_KEY` 替换为你实际的 Gemini API 密钥
 - 基础 URL 专门配置为通过 LangManus 的 OpenAI 兼容接口使用 Gemini
 - 可用模型包括用于聊天和视觉任务的 `gemini-2.0-flash`
+
+### 如何使用 Azure 模型？
+
+LangManus 支持集成 Azure 的模型。您可以参考[litellm Azure](https://docs.litellm.ai/docs/providers/azure)。conf.yaml配置示例：
+```yaml
+REASONING_MODEL:
+  model: "azure/gpt-4o-2024-08-06"
+  api_base: $AZURE_API_BASE
+  api_version: $AZURE_API_VERSION
+  api_key: $AZURE_API_KEY
+```
 
 ---
 
