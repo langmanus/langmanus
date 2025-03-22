@@ -111,6 +111,7 @@ The system consists of the following agents working together:
 ### Core Capabilities
 
 - 🤖 **LLM Integration**
+    - It supports the integration of most models through [litellm](https://docs.litellm.ai/docs/providers). 
     - Support for open source models like Qwen
     - OpenAI-compatible API interface
     - Multi-tier LLM system for different task complexities
@@ -174,70 +175,62 @@ By completing these steps, you'll ensure your environment is properly configured
 
 ### Configuration
 
-LangManus uses a three-tier LLM system with separate configurations for reasoning, basic tasks, and vision-language tasks. Create a `.env` file in the project root and configure the following environment variables:
+LangManus uses a three-layer LLM system, which are respectively used for reasoning, basic tasks, and vision-language tasks. Configuration is done using the `conf.yaml` file in the root directory of the project. You can copy `conf.yaml.example` to `conf.yaml` to start the configuration:
+```bash
+cp conf.yaml.example conf.yaml
+```
 
+```yaml
+# Setting it to true will read the conf.yaml configuration, and setting it to false will use the original .env configuration. The default is false (compatible with existing configurations)
+USE_CONF: true
+
+# LLM Config
+## Follow the litellm configuration parameters: https://docs.litellm.ai/docs/providers. You can click on the specific provider document to view the completion parameter examples
+REASONING_MODEL:
+  model: "volcengine/ep-xxxx"
+  api_key: $REASONING_API_KEY # Supports referencing the environment variable ENV_KEY in the.env file through $ENV_KEY
+  api_base: $REASONING_BASE_URL
+
+BASIC_MODEL:
+  model: "azure/gpt-4o-2024-08-06"
+  api_base: $AZURE_API_BASE
+  api_version: $AZURE_API_VERSION
+  api_key: $AZURE_API_KEY
+
+VISION_MODEL:
+  model: "azure/gpt-4o-2024-08-06"
+  api_base: $AZURE_API_BASE
+  api_version: $AZURE_API_VERSION
+  api_key: $AZURE_API_KEY
+```
+
+You can create a .env file in the root directory of the project and configure the following environment variables. You can copy the.env.example file as a template to start:
+```bash
+cp .env.example .env
+```
 ```ini
-# Reasoning LLM Configuration (for complex reasoning tasks)
-REASONING_MODEL=your_reasoning_model
-REASONING_API_KEY=your_reasoning_api_key
-REASONING_BASE_URL=your_custom_base_url  # Optional
-
-# Basic LLM Configuration (for simpler tasks)
-BASIC_MODEL=your_basic_model
-BASIC_API_KEY=your_basic_api_key
-BASIC_BASE_URL=your_custom_base_url  # Optional
-
-# Vision-Language LLM Configuration (for tasks involving images)
-VL_MODEL=your_vl_model
-VL_API_KEY=your_vl_api_key
-VL_BASE_URL=your_custom_base_url  # Optional
-
-# Tool API Keys
+# Tool API Key
 TAVILY_API_KEY=your_tavily_api_key
 JINA_API_KEY=your_jina_api_key  # Optional
 
 # Browser Configuration
-CHROME_INSTANCE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome  # Optional, path to Chrome executable
-CHROME_HEADLESS=False  # Optional, default is False
-CHROME_PROXY_SERVER=http://127.0.0.1:10809  # Optional, default is None
-CHROME_PROXY_USERNAME=  # Optional, default is None
-CHROME_PROXY_PASSWORD=  # Optional, default is None
+CHROME_INSTANCE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome  # Optional, the path to the Chrome executable file
+CHROME_HEADLESS=False  # Optional, the default is False
+CHROME_PROXY_SERVER=http://127.0.0.1:10809  # Optional, the default is None
+CHROME_PROXY_USERNAME=  # Optional, the default is None
+CHROME_PROXY_PASSWORD=  # Optional, the default is None
 ```
 
-In addition to supporting LLMs compatible with OpenAI, LangManus also supports Azure LLMs. The configuration method is as follows:
-
-```ini
-# AZURE LLM Config
-AZURE_API_BASE=https://xxxx
-AZURE_API_KEY=xxxxx
-AZURE_API_VERSION=2023-07-01-preview
-
-# Reasoning LLM (for complex reasoning tasks)
-REASONING_AZURE_DEPLOYMENT=xxx
-
-# Non-reasoning LLM (for straightforward tasks)
-BASIC_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
-
-# Vision-language LLM (for tasks requiring visual understanding)
-VL_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
-```
 
 > **Note:**
 >
 > - The system uses different models for different types of tasks:
->     - Reasoning LLM for complex decision-making and analysis
->     - Basic LLM for simpler text-based tasks
->     - Vision-Language LLM for tasks involving image understanding
-> - You can customize the base URLs for all LLMs independently, and you can use LiteLLM's board LLM support by following [this guide](https://docs.litellm.ai/docs/providers).
-> - Each LLM can use different API keys if needed
-> - Jina API key is optional. Provide your own key to access a higher rate limit (get your API key at [jina.ai](https://jina.ai/))
-> - Tavily API key is **required**. Tavily search is configured to return a maximum of 5 results by default (get your API key at [app.tavily.com](https://app.tavily.com/))
-
-You can copy the `.env.example` file as a template to get started:
-
-```bash
-cp .env.example .env
-```
+>     - The reasoning LLM is used for complex decision-making and analysis.
+>     - The basic LLM is used for simple text tasks.
+>     - The vision-language LLM is used for tasks involving image understanding.
+> - The configuration of all LLMs can be customized independently.
+> - The Jina API key is optional. Providing your own key can obtain a higher rate limit (you can obtain this key at [jina.ai](https://jina.ai/)).
+> - The default configuration for Tavily search is to return up to 5 results (you can obtain this key at [app.tavily.com](https://app.tavily.com/)). 
 
 ### Configure Pre-commit Hook
 

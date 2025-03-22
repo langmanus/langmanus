@@ -92,6 +92,7 @@ LangManusは、スーパーバイザーが専門のエージェントを調整�
 ### コア機能
 
 - 🤖 **LLM統合**
+    - [litellm](https://docs.litellm.ai/docs/providers)を通じて、ほとんどのモデルに接続することができます。 
     - Qwenなどのオープンソースモデルのサポート
     - OpenAI互換のAPIインターフェース
     - 異なるタスクの複雑さに対応するマルチティアLLMシステム
@@ -155,70 +156,63 @@ uv sync
 
 ### 設定
 
-LangManusは、推論、基本タスク、およびビジョン言語タスクのための3層のLLMシステムを使用しています。プロジェクトのルートに`.env`ファイルを作成し、次の環境変数を設定します。
-
-```ini
-# 推論LLMの設定（複雑な推論タスク用）
-REASONING_MODEL=your_reasoning_model
-REASONING_API_KEY=your_reasoning_api_key
-REASONING_BASE_URL=your_custom_base_url  # オプション
-
-# 基本LLMの設定（簡単なタスク用）
-BASIC_MODEL=your_basic_model
-BASIC_API_KEY=your_basic_api_key
-BASIC_BASE_URL=your_custom_base_url  # オプション
-
-# ビジョン言語LLMの設定（画像を含むタスク用）
-VL_MODEL=your_vl_model
-VL_API_KEY=your_vl_api_key
-VL_BASE_URL=your_custom_base_url  # オプション
-
-# ツールAPIキー
-TAVILY_API_KEY=your_tavily_api_key
-JINA_API_KEY=your_jina_api_key  # オプション
-
-# ブラウザの設定
-CHROME_INSTANCE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome  # オプション、Chrome実行ファイルのパス
-CHROME_HEADLESS=False  # オプション、デフォルトはFalse
-CHROME_PROXY_SERVER=http://127.0.0.1:10809  # オプション、デフォルトはNone
-CHROME_PROXY_USERNAME=  # オプション、デフォルトはNone
-CHROME_PROXY_PASSWORD=  # オプション、デフォルトはNone
+LangManusは3層のLLMシステムを使用しており、それぞれ推論、基本タスク、および視覚言語タスクに用いられます。プロジェクトのルートディレクトリにある`conf.yaml`を使って設定を行います。`conf.yaml.example`を`conf.yaml`にコピーして設定を始めることができます：
+```bash
+cp conf.yaml.example conf.yaml
 ```
 
-OpenAI互換のLLMに加えて、LangManusはAzure LLMもサポートしています。設定方法は次のとおりです。
+```yaml
+# trueに設定するとconf.yamlの設定を読み取り、falseに設定すると元の.envの設定を使用します。デフォルトはfalseです（既存の設定と互換性があります）
+USE_CONF: true
 
-```ini
-# AZURE LLMの設定
-AZURE_API_BASE=https://xxxx
-AZURE_API_KEY=xxxxx
-AZURE_API_VERSION=2023-07-01-preview
+# LLM 設定
+## litellmの設定パラメータに従ってください: https://docs.litellm.ai/docs/providers 。具体的なプロバイダのドキュメントをクリックして、completionパラメータの例を参照できます
+REASONING_MODEL:
+  model: "volcengine/ep-xxxx"
+  api_key: $REASONING_API_KEY # .envファイル内の環境変数ENV_KEYを$ENV_KEYを使って参照することができます
+  api_base: $REASONING_BASE_URL
 
-# 推論LLM（複雑な推論タスク用）
-REASONING_AZURE_DEPLOYMENT=xxx
+BASIC_MODEL:
+  model: "azure/gpt-4o-2024-08-06"
+  api_base: $AZURE_API_BASE
+  api_version: $AZURE_API_VERSION
+  api_key: $AZURE_API_KEY
 
-# 非推論LLM（簡単なタスク用）
-BASIC_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
-
-# ビジョン言語LLM（視覚的理解を必要とするタスク用）
-VL_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
+VISION_MODEL:
+  model: "azure/gpt-4o-2024-08-06"
+  api_base: $AZURE_API_BASE
+  api_version: $AZURE_API_VERSION
+  api_key: $AZURE_API_KEY
 ```
 
-> **注意:**
->
-> - システムは異なるタスクの種類に対して異なるモデルを使用します。
->     - 推論LLMは複雑な意思決定と分析のため
->     - 基本LLMは簡単なテキストベースのタスクのため
->     - ビジョン言語LLMは画像理解を含むタスクのため
-> - すべてのLLMのベースURLを独立してカスタマイズできます。また、[このガイド](https://docs.litellm.ai/docs/providers)に従ってLiteLLMのボードLLMサポートを使用できます。
-> - 必要に応じて、各LLMは異なるAPIキーを使用できます。
-> - Jina APIキーはオプションです。独自のキーを提供して、より高いレート制限にアクセスできます（[jina.ai](https://jina.ai/)でAPIキーを取得してください）。
-> - Tavily APIキーは**必須**です。Tavily検索はデフォルトで最大5件の結果を返すように設定されています（[app.tavily.com](https://app.tavily.com/)でAPIキーを取得してください）。
-
-`.env.example`ファイルをテンプレートとしてコピーして開始できます。
-
+プロジェクトのルートディレクトリに.envファイルを作成し、以下の環境変数を設定することができます。.env.exampleファイルをテンプレートとしてコピーして始めることができます：
 ```bash
 cp .env.example .env
 ```
+```ini
+# ツールのAPIキー
+TAVILY_API_KEY=your_tavily_api_key
+JINA_API_KEY=your_jina_api_key  # オプション
+
+# ブラウザ設定
+CHROME_INSTANCE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome  # オプション、Chromeの実行可能ファイルのパス
+CHROME_HEADLESS=False  # オプション、デフォルトは False
+CHROME_PROXY_SERVER=http://127.0.0.1:10809  # オプション、デフォルトは None
+CHROME_PROXY_USERNAME=  # オプション、デフォルトは None
+CHROME_PROXY_PASSWORD=  # オプション、デフォルトは None
+```
+
+
+> **注意：**
+>
+> - システムは異なるタイプのタスクに対して異なるモデルを使用します：
+>     - 推論用のLLMは複雑な意思決定と分析に用いられます
+>     - 基本的なLLMは簡単なテキストタスクに用いられます
+>     - 視覚言語LLMは画像理解に関連するタスクに用いられます
+> - すべてのLLMの設定は独立してカスタマイズすることができます
+> - Jina APIキーはオプションです。独自のキーを提供することで、より高いレート制限を得ることができます（[jina.ai](https://jina.ai/) でこのキーを取得できます）
+> - Tavily検索のデフォルト設定は最大5つの結果を返すことです（[app.tavily.com](https://app.tavily.com/) でこのキーを取得できます） 
+
 
 ### プリコミットフックの設定
 

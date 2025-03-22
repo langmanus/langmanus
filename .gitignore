@@ -15,4 +15,7 @@ static/browser_history/*.gif
 # Environment variables
 .env
 
+# user conf
+conf.yaml
+
 .idea/

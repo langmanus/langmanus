@@ -1,5 +1,4 @@
 version = 1
-revision = 1
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.13'",
@@ -986,6 +985,8 @@ dependencies = [
     { name = "markdownify" },
     { name = "numpy" },
     { name = "pandas" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
     { name = "python-dotenv" },
     { name = "readabilipy" },
     { name = "socksio" },
@@ -1020,7 +1021,9 @@ requires-dist = [
     { name = "markdownify", specifier = ">=1.1.0" },
     { name = "numpy", specifier = ">=2.2.3" },
     { name = "pandas", specifier = ">=2.2.3" },
+    { name = "pytest", specifier = ">=8.3.5" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=7.4.0" },
+    { name = "pytest-cov", specifier = ">=6.0.0" },
     { name = "pytest-cov", marker = "extra == 'test'", specifier = ">=4.1.0" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "readabilipy", specifier = ">=0.3.0" },
@@ -1029,7 +1032,6 @@ requires-dist = [
     { name = "uvicorn", specifier = ">=0.27.1" },
     { name = "yfinance", specifier = ">=0.2.54" },
 ]
-provides-extras = ["dev", "test"]
 
 [[package]]
 name = "langchain"

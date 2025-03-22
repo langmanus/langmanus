@@ -113,6 +113,7 @@ LangManus 实现了一个分层的多智能体系统，其中有一个主管智�
 ### 核心能力
 
 - 🤖 **LLM 集成**
+    - 支持通过[litellm](https://docs.litellm.ai/docs/providers)接入大部分模型
     - 支持通义千问等开源模型
     - OpenAI 兼容的 API 接口
     - 多层 LLM 系统适配不同任务复杂度
@@ -180,24 +181,40 @@ uv sync
 
 ### 配置
 
-LangManus 使用三层 LLM 系统，分别用于推理、基础任务和视觉语言任务。在项目根目录创建 `.env` 文件并配置以下环境变量：
+LangManus 使用三层 LLM 系统，分别用于推理、基础任务和视觉语言任务，使用项目根目录下conf.yaml进行配置，您可以复制`conf.yaml.example`到`conf.yaml`开始配置：
+```bash
+cp conf.yaml.example conf.yaml
+```
 
+```yaml
+# 设置为true会读取conf.yaml配置，设置为false会使用原来的.env配置，默认为false（兼容存量配置）
+USE_CONF: true
+
+# LLM Config
+## 遵循litellm配置参数: https://docs.litellm.ai/docs/providers, 可以点击具体provider文档，参看completion参数示例
+REASONING_MODEL:
+  model: "volcengine/ep-xxxx"
+  api_key: $REASONING_API_KEY # 支持通过$ENV_KEY引用.env文件中的环境变量ENV_KEY
+  api_base: $REASONING_BASE_URL
+
+BASIC_MODEL:
+  model: "azure/gpt-4o-2024-08-06"
+  api_base: $AZURE_API_BASE
+  api_version: $AZURE_API_VERSION
+  api_key: $AZURE_API_KEY
+
+VISION_MODEL:
+  model: "azure/gpt-4o-2024-08-06"
+  api_base: $AZURE_API_BASE
+  api_version: $AZURE_API_VERSION
+  api_key: $AZURE_API_KEY
+```
+
+您可以在项目根目录创建 .env 文件并配置以下环境变量，您可以复制 .env.example 文件作为模板开始：
+```bash
+cp .env.example .env
+````
 ```ini
-# 推理 LLM 配置（用于复杂推理任务）
-REASONING_MODEL=your_reasoning_model
-REASONING_API_KEY=your_reasoning_api_key
-REASONING_BASE_URL=your_custom_base_url  # 可选
-
-# 基础 LLM 配置（用于简单任务）
-BASIC_MODEL=your_basic_model
-BASIC_API_KEY=your_basic_api_key
-BASIC_BASE_URL=your_custom_base_url  # 可选
-
-# 视觉语言 LLM 配置（用于涉及图像的任务）
-VL_MODEL=your_vl_model
-VL_API_KEY=your_vl_api_key
-VL_BASE_URL=your_custom_base_url  # 可选
-
 # 工具 API 密钥
 TAVILY_API_KEY=your_tavily_api_key
 JINA_API_KEY=your_jina_api_key  # 可选
@@ -210,23 +227,6 @@ CHROME_PROXY_USERNAME=  # 可选，默认是 None
 CHROME_PROXY_PASSWORD=  # 可选，默认是 None
 ```
 
-除了 openai 兼容 LLM，LangManus 也支持 Azure LLM，配置方式如下：
-
-```ini
-# AZURE LLM Config
-AZURE_API_BASE=https://xxxx
-AZURE_API_KEY=xxxxx
-AZURE_API_VERSION=2023-07-01-preview
-
-# Reasoning LLM (for complex reasoning tasks)
-REASONING_AZURE_DEPLOYMENT=xxx
-
-# Non-reasoning LLM (for straightforward tasks)
-BASIC_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
-
-# Vision-language LLM (for tasks requiring visual understanding)
-VL_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
-```
 
 > **注意：**
 >
@@ -234,16 +234,10 @@ VL_AZURE_DEPLOYMENT=gpt-4o-2024-08-06
 >     - 推理 LLM 用于复杂的决策和分析
 >     - 基础 LLM 用于简单的文本任务
 >     - 视觉语言 LLM 用于涉及图像理解的任务
-> - 所有 LLM 的基础 URL 都可以独立自定义
-> - 每个 LLM 可以使用不同的 API 密钥
+> - 所有 LLM 的配置可以独立自定义
 > - Jina API 密钥是可选的，提供自己的密钥可以获得更高的速率限制（你可以在 [jina.ai](https://jina.ai/) 获该密钥）
 > - Tavily 搜索默认配置为最多返回 5 个结果（你可以在 [app.tavily.com](https://app.tavily.com/) 获取该密钥）
 
-您可以复制 `.env.example` 文件作为模板开始：
-
-```bash
-cp .env.example .env
-```
 
 ### 配置预提交钩子
 

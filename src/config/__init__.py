@@ -26,6 +26,7 @@ from .env import (
     CHROME_PROXY_PASSWORD,
 )
 from .tools import TAVILY_MAX_RESULTS, BROWSER_HISTORY_DIR
+from .loader import load_yaml_config
 
 # Team configuration
 TEAM_MEMBER_CONFIGRATIONS = {

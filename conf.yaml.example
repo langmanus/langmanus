@@ -1,0 +1,21 @@
+# if true, use conf.yaml, else use original .env config, default false
+USE_CONF: true
+
+# LLM Config
+## follow litellm config: https://docs.litellm.ai/docs/providers
+REASONING_MODEL:
+  model: "volcengine/ep-xxxx"
+  api_key: $REASONING_API_KEY
+  api_base: $REASONING_BASE_URL
+
+BASIC_MODEL:
+  model: "azure/gpt-4o-2024-08-06"
+  api_base: $AZURE_API_BASE
+  api_version: $AZURE_API_VERSION
+  api_key: $AZURE_API_KEY
+
+VISION_MODEL:
+  model: "azure/gpt-4o-2024-08-06"
+  api_base: $AZURE_API_BASE
+  api_version: $AZURE_API_VERSION
+  api_key: $AZURE_API_KEY
