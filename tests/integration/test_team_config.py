@@ -6,7 +6,7 @@ from src.prompts.template import get_prompt_template, apply_prompt_template
 def test_team_member_config_structure():
     """Test the structure of team member configurations"""
     required_keys = {"name", "desc", "desc_for_llm", "is_optional"}
-    
+
     for member in TEAM_MEMBERS:
         config = TEAM_MEMBER_CONFIGRATIONS[member]
         # 检查所有必需的键是否存在
@@ -24,15 +24,15 @@ def test_desc_for_llm_content():
     researcher_desc = TEAM_MEMBER_CONFIGRATIONS["researcher"]["desc_for_llm"]
     assert "search engines" in researcher_desc.lower()
     assert "web crawlers" in researcher_desc.lower()
-    
+
     coder_desc = TEAM_MEMBER_CONFIGRATIONS["coder"]["desc_for_llm"]
     assert "python" in coder_desc.lower() or "bash" in coder_desc.lower()
     assert "mathematical" in coder_desc.lower()
-    
+
     browser_desc = TEAM_MEMBER_CONFIGRATIONS["browser"]["desc_for_llm"]
     assert "web pages" in browser_desc.lower()
     assert "interactions" in browser_desc.lower()
-    
+
     reporter_desc = TEAM_MEMBER_CONFIGRATIONS["reporter"]["desc_for_llm"]
     assert "report" in reporter_desc.lower()
 
@@ -44,20 +44,20 @@ def test_template_desc_for_llm_rendering():
         "task": "test task",
         "workspace_context": "test context",
     }
-    
+
     # 测试 planner 模板
     planner_messages = apply_prompt_template("planner", test_state)
     planner_content = planner_messages[0]["content"]
-    
+
     # 检查是否所有成员的 desc_for_llm 都被正确渲染到模板中
     for member in TEAM_MEMBERS:
         desc = TEAM_MEMBER_CONFIGRATIONS[member]["desc_for_llm"]
         assert desc in planner_content
-    
+
     # 测试 supervisor 模板
     supervisor_messages = apply_prompt_template("supervisor", test_state)
     supervisor_content = supervisor_messages[0]["content"]
-    
+
     # 检查是否所有成员的 desc_for_llm 都被正确渲染到模板中
     for member in TEAM_MEMBERS:
         desc = TEAM_MEMBER_CONFIGRATIONS[member]["desc_for_llm"]
@@ -72,14 +72,14 @@ def test_template_format_after_desc_for_llm(template_name):
         "task": "test task",
         "workspace_context": "test context",
     }
-    
+
     messages = apply_prompt_template(template_name, test_state)
     content = messages[0]["content"]
-    
+
     # 检查基本格式是否保持正确
     assert "---" in content  # 检查 frontmatter
     assert "CURRENT_TIME:" in content
-    
+
     # 检查团队成员列表格式
     for member in TEAM_MEMBERS:
-        assert f"**`{member}`**:" in content  # 检查成员标题格式 
+        assert f"**`{member}`**:" in content  # 检查成员标题格式
