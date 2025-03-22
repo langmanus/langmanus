@@ -1,5 +1,5 @@
 import logging
-from src.config import TEAM_MEMBERS
+from src.config import TEAM_MEMBER_CONFIGRATIONS, TEAM_MEMBERS
 from src.graph import build_graph
 
 # Configure logging
@@ -41,6 +41,7 @@ def run_agent_workflow(user_input: str, debug: bool = False):
         {
             # Constants
             "TEAM_MEMBERS": TEAM_MEMBERS,
+            "TEAM_MEMBER_CONFIGRATIONS": TEAM_MEMBER_CONFIGRATIONS,
             # Runtime Variables
             "messages": [{"role": "user", "content": user_input}],
             "deep_thinking_mode": True,

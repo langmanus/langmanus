@@ -40,6 +40,8 @@ def test_desc_for_llm_content():
 def test_template_desc_for_llm_rendering():
     """Test the rendering of desc_for_llm in templates"""
     test_state = {
+        "TEAM_MEMBERS": TEAM_MEMBERS,
+        "TEAM_MEMBER_CONFIGRATIONS": TEAM_MEMBER_CONFIGRATIONS,
         "messages": [{"role": "user", "content": "test message"}],
         "task": "test task",
         "workspace_context": "test context",
@@ -68,6 +70,8 @@ def test_template_desc_for_llm_rendering():
 def test_template_format_after_desc_for_llm(template_name):
     """Test the template format remains correct after desc_for_llm integration"""
     test_state = {
+        "TEAM_MEMBERS": TEAM_MEMBERS,
+        "TEAM_MEMBER_CONFIGRATIONS": TEAM_MEMBER_CONFIGRATIONS,
         "messages": [{"role": "user", "content": "test message"}],
         "task": "test task",
         "workspace_context": "test context",

@@ -2,7 +2,7 @@ import logging
 from typing import Optional
 import asyncio
 
-from src.config import TEAM_MEMBERS
+from src.config import TEAM_MEMBER_CONFIGRATIONS, TEAM_MEMBERS
 from src.graph import build_graph
 from src.tools.browser import browser_tool
 from langchain_community.adapters.openai import convert_message_to_dict
@@ -90,6 +90,7 @@ async def run_agent_workflow(
             {
                 # Constants
                 "TEAM_MEMBERS": team_members,
+                "TEAM_MEMBER_CONFIGRATIONS": TEAM_MEMBER_CONFIGRATIONS,
                 # Runtime Variables
                 "messages": user_input_messages,
                 "deep_thinking_mode": deep_thinking_mode,
