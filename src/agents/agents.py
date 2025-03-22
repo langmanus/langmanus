@@ -12,6 +12,7 @@ from src.tools import (
 from src.llms.llm import get_llm_by_type
 from src.config.agents import AGENT_LLM_MAP
 
+
 # Create agents using configured LLM types
 def create_agent(agent_type: str, tools: list, prompt_template: str):
     """Factory function to create agents with consistent configuration."""
@@ -20,6 +21,7 @@ def create_agent(agent_type: str, tools: list, prompt_template: str):
         tools=tools,
         prompt=lambda state: apply_prompt_template(prompt_template, state),
     )
+
 
 # Create agents using the factory function
 research_agent = create_agent("researcher", [tavily_tool, crawl_tool], "researcher")
