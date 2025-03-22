@@ -361,6 +361,25 @@ LangManus provides a default web UI.
 
 Please refer to the [langmanus/langmanus-web-ui](https://github.com/langmanus/langmanus-web) project for more details.
 
+## Docker Compose (include both backend and frontend)
+
+LangManus provides a docker-compose setup to easily run both the backend and frontend together:
+
+```bash
+# Start both backend and frontend
+docker-compose up -d
+
+# The backend will be available at http://localhost:8000
+# The frontend will be available at http://localhost:3000, which could be accessed through web browser
+```
+
+This will:
+1. Build and start the LangManus backend container
+2. Build and start the LangManus web UI container
+3. Connect them using a shared network
+
+** Make sure you have your `.env` file prepared with the necessary API keys before starting the services. **
+
 ## Development
 
 ### Testing

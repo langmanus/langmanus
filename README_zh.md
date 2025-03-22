@@ -18,10 +18,10 @@ LangManus 是一个社区驱动的 AI 自动化框架，它建立在开源社区
 **LangManus的全自动计划与解决方案**:
 
 1. **收集最新信息**  
-   通过在线搜索获取关于“DeepSeek R1”、“HuggingFace”以及相关主题的最新信息。
+   通过在线搜索获取关于"DeepSeek R1"、"HuggingFace"以及相关主题的最新信息。
 
 2. **访问HuggingFace官网**  
-   使用 Chromium 实例访问 HuggingFace 的官方网站，搜索“DeepSeek R1”，并检索最新数据，包括关注者数量、点赞数、下载量及其他相关指标。
+   使用 Chromium 实例访问 HuggingFace 的官方网站，搜索"DeepSeek R1"，并检索最新数据，包括关注者数量、点赞数、下载量及其他相关指标。
 
 3. **查找模型影响力计算公式**  
    使用搜索引擎和网页抓取技术，寻找计算模型影响力的相关公式或方法。
@@ -268,8 +268,6 @@ ln -s ../../pre-commit .git/hooks/pre-commit
 - 将任何重新格式化的文件添加回暂存区
 - 如果有任何代码检查或格式化错误，阻止提交
 
-
-
 ## 使用方法
 
 ### 基本执行
@@ -366,6 +364,25 @@ docker run --rm -it --env-file .env -e CHROME_HEADLESS=True langmanus uv run pyt
 LangManus 提供一个默认的网页界面。
 
 请参考 [langmanus/langmanus-web](https://github.com/langmanus/langmanus-web) 项目了解更多信息。
+
+## Docker Compose (包括前后端)
+
+LangManus 提供了 docker-compose 设置，可以轻松地同时运行后端和前端：
+
+```bash
+# 启动后端和前端
+docker-compose up -d
+
+# 后端将在 http://localhost:8000 可用
+# 前端将在 http://localhost:3000 可用，可以通过浏览器访问
+```
+
+这将：
+1. 构建并启动 LangManus 后端容器
+2. 构建并启动 LangManus Web UI 容器
+3. 使用共享网络连接它们
+
+在启动服务之前，请确保已准备好包含必要 API 密钥的 `.env` 文件。
 
 ## 开发
 

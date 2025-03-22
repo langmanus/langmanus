@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: langmanus-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - CHROME_HEADLESS=True
+    restart: unless-stopped
+    networks:
+      - langmanus-network
+
+  frontend:
+    build:
+      context: https://github.com/langmanus/langmanus-web.git
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:8000/api
+    container_name: langmanus-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - langmanus-network
+
+networks:
+  langmanus-network:
+    driver: bridge

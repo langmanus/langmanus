@@ -342,6 +342,25 @@ LangManusはデフォルトのWeb UIを提供します。
 
 詳細については、[langmanus/langmanus-web-ui](https://github.com/langmanus/langmanus-web)プロジェクトを参照してください。
 
+## Docker Compose (バックエンドとフロントエンドを含む)
+
+LangManusは、バックエンドとフロントエンドの両方を簡単に実行するためのdocker-compose設定を提供しています：
+
+```bash
+# バックエンドとフロントエンドを起動
+docker-compose up -d
+
+# バックエンドは http://localhost:8000 で利用可能
+# フロントエンドは http://localhost:3000 で利用可能, ブラウザでアクセス可能
+```
+
+これにより：
+1. LangManusバックエンドコンテナをビルドして起動
+2. LangManus Web UIコンテナをビルドして起動
+3. 共有ネットワークを使用してそれらを接続
+
+サービスを開始する前に、必要なAPIキーを含む`.env`ファイルが準備されていることを確認してください。
+
 ## 開発
 
 ### テスト
