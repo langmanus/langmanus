@@ -19,6 +19,7 @@ class State(MessagesState):
 
     # Constants
     TEAM_MEMBERS: list[str]
+    TEAM_MEMBER_CONFIGRATIONS: dict[str, dict]
 
     # Runtime Variables
     next: str

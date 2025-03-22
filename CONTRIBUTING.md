@@ -23,7 +23,7 @@ There are many ways you can contribute to LangManus:
    ```
 3. Set up your development environment:
    ```bash
-   uv sync
+   uv sync --all-extras
    uv run playwright install
    ```
 4. Configure pre-commit hooks:
